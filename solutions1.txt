@@ -1,0 +1,2055 @@
+# [Gold V] Tiling
+
+[문제 링크](https://www.acmicpc.net/problem/15243) 
+
+## 문제 설명
+
+<p dir="ltr">Domino tiles (or dominoes) are rectangular pieces of size 2x1. Each square contains a number from 1 to 6. These pieces are used to play a game but in this problem we are going to use them for something different.</p>
+
+<p dir="ltr">We can build rectangles of certain width W and height 3 using dominoes. We are wondering how many ways of creating such rectangles are possible.</p>
+
+<p>Below you can see the three possible ways of creating a rectangle of width 2 and height 3.</p>
+
+<p style="text-align:center"><img alt="" src="https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/problem/15243/1.png" style="height:83px; width:245px"></p>
+
+<p>As you see there are many ways of tiling the rectangle. For example this is a possible solution with width 12:</p>
+
+<p style="text-align:center"><img alt="" src="https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/problem/15243/2.gif" style="height:80px; width:273px"></p>
+
+<p>Your task is to write a program that computes the number of possible ways of tiling a rectangle of width W and height 3.</p>
+
+## 입력 
+
+ <p dir="ltr">A single line with an integer W. The width of the rectangle.</p>
+
+<p dir="ltr">The value of W will be between 1 and 1000.</p>
+
+## 출력 
+
+ <p dir="ltr">A single line with the number of possible ways. The numbers can be large so print the solution modulo 1000000007 (10<sup>9</sup> + 7).</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+const ll MOD = 1e9+7;
+
+ll w[1001];
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n; cin >> n;
+
+    w[2]=3;
+    for(int i=4;i<=n;i+=2) {
+        w[i] = (w[i-2]*3+2)%MOD;
+        for(int j=2;j<i-2;j+=2) w[i] = (w[i]+w[j]*2)%MOD;
+    }
+    cout << w[n];
+}
+```
+
+# A. In the Dream
+[문제 링크](https://codeforces.com/contest/2136/problem/A)
+
+## Problem Statement
+Two football teams, the RiOI team and the KDOI team, are about to have a football match. A football match consists of two halves — the first half and the second half. At the beginning of the match, both teams have a score of \$0\$.
+
+As a fan of both teams, Aquawave knows that the two teams have similar levels, so neither team will score **three consecutive** goals in the **same half**.
+
+Aquawave had a dream the night before the match, in which:
+
+* The score at the end of the first half was \$a\:b\$, where \$a\$ is the score of the RiOI team, and \$b\$ is the score of the KDOI team;
+* And, the score at the end of the second half was \$c\:d\$, where \$c\$ is the score of the RiOI team, and \$d\$ is the score of the KDOI team.
+
+You have to determine whether Aquawave's dream can come true according to the above information.
+
+## Input
+
+Each test contains multiple test cases. The first line contains the number of test cases \$t\$ (\$1 \le t \le 1000\$). The description of the test cases follows.
+
+The only line of each test case contains four integers \$a\$, \$b\$, \$c\$, and \$d\$ (\$0 \le a \le c \le 100\$, \$0 \le b \le d \le 100\$) — the score at the end of the first half and the score at the end of the second half.
+
+## Output
+
+For each test case, print "YES" if Aquawave's dream can come true. Otherwise, print "NO".
+
+You can output the answer in any case (upper or lower). For example, the strings "yEs", "yes", "Yes", and "YES" will be recognized as positive responses.
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t;
+    while(t--) {
+        int a, b, c, d; cin >> a >> b >> c >> d;
+        if((a+1)*2<b || a>(b+1)*2 || a>c || b>d || (c-a+1)*2<d-b || c-a>(d-b+1)*2) cout << "NO\n";
+        else cout << "YES\n";
+    }
+}
+```
+
+# B. Like the Bitset
+[문제 링크](https://codeforces.com/contest/2136/problem/B)
+
+## Problem Statement
+You must find such a permutation, or determine that no such permutation exists.
+
+You are given a binary string $s$ of length $n$, as well as an integer $k$.
+
+Aquawave wants to construct a permutation $p$ of length $n$, so that for each $1 \leq i \leq n$, where $s_i = \mathtt{1}$, the following holds:
+
+- For each interval $[l, r]$ ($1 \leq l \leq r \leq n$) whose length is at least $k$ (i.e. $r - l + 1 \geq k$), if it covers position $i$ (i.e. $l \leq i \leq r$), then the maximum element among $p_l, p_{l+1}, \ldots, p_r$ is **not** $p_i$.
+
+Note that there are **no** such constraints on indices with $s_i = \mathtt{0}$.
+
+You have to find such a permutation, or determine that such permutations do not exist.
+
+## Input
+Each test contains multiple test cases.  
+The first line contains the number of test cases $t$ ($1 \leq t \leq 10^4$).  
+The description of the test cases follows.
+
+- The first line of each test case contains two integers $n$ and $k$ ($1 \leq n \leq 2 \cdot 10^5$, $1 \leq k \leq n$) — the length of $s$ and the integer in the statements.
+
+* The second line contains the binary string $s$ of length $n$ ($s_i = \mathtt{0}$ or $\mathtt{1}$).
+
+It is guaranteed that the sum of $n$ over all test cases does not exceed $2 \cdot 10^5$.
+
+## Output
+For each test case:
+
+- If there is at least one possible permutation:
+  - Print `"YES"` in the first line of output;
+  - Then, print $n$ integers $p_1, p_2, \ldots, p_n$ ($1 \leq p_i \leq n$, all $p_i$ are distinct) in the second line — the permutation you constructed.
+
+* Otherwise, print `"NO"` in the single line of output.
+
+You can output the tokens in any case (upper or lower).  
+For example, the strings `"yEs"`, `"yes"`, `"Yes"`, and `"YES"` will be recognized as positive responses.
+
+If there are multiple answers, you may output any of them.
+
+## Footnotes
+
+A **binary string** is a string where each character is either $\mathtt{0}$ or $\mathtt{1}$.  
+A **permutation** of length $n$ is an array consisting of $n$ distinct integers from $1$ to $n$ in arbitrary order.  
+For example, $[2,3,1,5,4]$ is a permutation, but $[1,2,2]$ is not (since $2$ appears twice), and $[1,3,4]$ is also not a permutation (here $n=3$ but there is a $4$ in the array).
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int n, k;
+string s;
+
+void solve() {
+    int len=0;
+    for(int i=0;i<n;i++) {
+        if(s[i]=='0') len=0;
+        else len++;
+        if(len>=k) {
+            cout << "NO\n";
+            return;
+        }
+    }
+
+    cout << "YES\n";
+    vector<int> ret(n);
+    int cnt=n;
+    for(int i=0;i<n;i++) {
+        if(s[i]=='0') ret[i] = cnt--;
+    }
+    for(int i=0;i<n;i++) {
+        if(!ret[i]) ret[i] = cnt--;
+    }
+    for(int i=0;i<n;i++) cout << ret[i] << ' ';
+    cout << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t;
+    while(t--) {
+        cin >> n >> k >> s;
+        solve();
+    }
+}
+```
+
+# C. Against the Difference
+[문제 링크](https://codeforces.com/contest/2136/problem/C)
+
+## Problem Statement
+We define that a *block* is an array where all elements in it are equal to the length of the array.  
+For example,  
+
+- $[3, 3, 3]$, $[1]$, and $[4, 4, 4, 4]$ are *blocks*,  
+- while $[1, 1, 1]$ and $[2, 3, 3]$ are **not**.  
+
+An array is called *neat* if it can be obtained by the concatenation of an arbitrary number of *blocks* (possibly zero).  
+Note that an empty array is always *neat*.  
+
+You are given an array $a$ consisting of $n$ integers.  
+Find the length of its longest *neat* subsequence.
+
+## Input
+Each test contains multiple test cases.  
+The first line contains the number of test cases $t$ $(1 \le t \le 10^4)$.  
+The description of the test cases follows.  
+
+- The first line of each test case contains an integer $n$ $(1 \le n \le 2 \cdot 10^5)$ — the length of $a$.  
+- The second line contains $n$ integers $a_1, a_2, \ldots, a_n$ $(1 \le a_i \le n)$ — the elements of $a$.  
+
+It is guaranteed that the sum of $n$ over all test cases does not exceed $2 \cdot 10^5$.  
+
+## Output
+For each test case, output a single integer — the length of the longest *neat* subsequence of $a$.
+
+## Footnotes
+A sequence $c$ is a subsequence of a sequence $a$ if $c$ can be obtained from $a$ by the deletion of several (possibly, zero or all) elements from arbitrary positions.
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+struct line {
+    int s, e, w;
+    bool operator<(const line l) const {
+        return e < l.e;
+    }
+};
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t;
+    while(t--) {
+        int n; cin >> n;
+
+        vector<deque<int>> deqs(n+1);
+        vector<line> lines;
+        for(int i=1;i<=n;i++) {
+            int a; cin >> a;
+            deqs[a].push_back(i);
+            if(deqs[a].size() == a) {
+                lines.push_back({deqs[a].front(), deqs[a].back(), a});
+                deqs[a].pop_front();
+            }
+        }
+        sort(lines.begin(), lines.end());
+
+        int last=1;
+        vector<int> dp(n+1);
+        for(line l : lines) {
+            while(last+1<l.s) dp[last+1] = max(dp[last+1], dp[last]), last++;
+            dp[l.e] = max(dp[l.e], dp[l.s-1] + l.w);
+        }
+        cout << *max_element(dp.begin(), dp.end()) << '\n';
+    }
+}
+```
+
+# D. For the Champion
+[문제 링크](https://codeforces.com/contest/2136/problem/D)
+
+## Problem Statement
+*This is an interactive problem.*
+
+The RiOI team is hosting a robot championship!
+
+This time, your robot is teleported into an **infinite** 2D plane with the Cartesian coordinate system on it. There are \$n\$ anchor points on the plane, and the coordinates of the \$i\$-th anchor point are \$(x\_i, y\_i)\$ (\$-10^9 \le x\_i, y\_i \le 10^9\$). These are given to your robot by the jury as soon as it is teleported into the plane. However, your robot doesn't know its initial coordinates at first.
+
+To test the IQ of your robot, the RiOI team has come up with an interesting game. Your robot needs to find out the initial coordinates \$(X, Y)\$ (\$-10^9 \le X, Y \le 10^9\$) by making the following moves.
+
+In one move, assuming that its current coordinates are \$(a, b)\$, your robot can choose a non-negative integer \$k\$ (\$0 \le k \le 10^9\$) and do **one** of the following four operations:
+
+* Move up by \$k\$ units: \$(a, b + k)\$
+* Move down by \$k\$ units: \$(a, b - k)\$
+* Move left by \$k\$ units: \$(a - k, b)\$
+* Move right by \$k\$ units: \$(a + k, b)\$
+
+After each move, the jury gives the **minimum Manhattan distance** between the current coordinates of your robot and any anchor point. More formally, if the coordinates after the move are \$(c, d)\$, the jury outputs
+
+$$
+\min_{1 \le i \le n}\big(|x_i - c| + |y_i - d|\big).
+$$
+
+You must find the **initial** coordinates \$(X, Y)\$ in **no more than 10 moves**.
+
+## Input
+
+Each test contains multiple test cases. The first line contains the number of test cases \$t\$ (\$1 \le t \le 100\$).
+
+For each test case:
+
+* The first line contains an integer \$n\$ (\$1 \le n \le 100\$) — the number of anchor points.
+* Then follow \$n\$ lines, the \$i\$-th line contains two integers \$x\_i\$ and \$y\_i\$ (\$-10^9 \le x\_i, y\_i \le 10^9\$) — the coordinates of the \$i\$-th anchor point.
+* The coordinates of the anchor points are pairwise distinct.
+
+## Interaction
+
+For each test case, first read \$n\$ and all anchor points. Then you may make up to **10 moves**.
+
+To make a move, print one of the following lines:
+
+* `? U k` — move up by \$k\$ units
+* `? D k` — move down by \$k\$ units
+* `? L k` — move left by \$k\$ units
+* `? R k` — move right by \$k\$ units
+
+You must guarantee \$0 \le k \le 10^9\$.
+
+After each move, the jury prints an integer \$s\$ — the minimum Manhattan distance between the current robot position and any anchor point.
+
+To report that you found the initial coordinates, print:
+
+* `! X Y` — meaning the initial coordinates are \$(X, Y)\$.
+
+Printing the answer **does not** count as one of the 10 moves.
+
+Assume that the initial coordinates are \$(X, Y)\$, with \$-10^9 \le X, Y \le 10^9\$.
+
+After printing each query, **don’t forget to end the line and flush** the output. Otherwise, you will get the verdict `Idleness limit exceeded`.
+
+If at any interaction step you read `-1` instead of valid data, your solution must **exit immediately** (this means `Wrong answer` due to an invalid query or other mistake).
+
+The interactor in this problem is **not adaptive**: the initial coordinates of the robot do not change during the interaction.
+
+## Hacks
+
+To perform a hack, use the following input format:
+
+* First line: an integer \$t\$ (\$1 \le t \le 100\$) — number of test cases.
+* For each test case:
+  * One line with an integer \$n\$ (\$1 \le n \le 100\$);
+  * \$n\$ lines with \$x\_i\$ and \$y\_i\$ (\$-10^9 \le x\_i, y\_i \le 10^9\$);
+  * One final line with two integers \$X\$ and \$Y\$ (\$-10^9 \le X, Y \le 10^9\$) — the initial coordinates of the robot.
+
+**Flush tips**
+* C++: `fflush(stdout);` or `cout.flush();`
+* Python: `sys.stdout.flush()`
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+const ll MAX = 1e9;
+
+struct pos {
+    int x, y;
+};
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t;
+    while(t--) {
+        int n; cin >> n;
+
+        pos p1 = {MAX, -MAX}; // (-10억, 10억)에서 가장 가까운 좌표 (a, b)
+        pos p2 = {-MAX, -MAX}; // (10억, 10억)에서 가장 가까운 좌표 (c, d)
+        for(int i=0;i<n;i++) {
+            pos p; cin >> p.x >> p.y;
+            if(abs(-MAX-p1.x) + abs(MAX-p1.y) > abs(-MAX-p.x) + abs(MAX-p.y)) p1=p;
+            if(abs(MAX-p2.x) + abs(MAX-p2.y) > abs(MAX-p.x) + abs(MAX-p.y)) p2=p;
+        }
+
+        // 20억+a-x + 20억-b+y = 왼쪽 위 거리 (dist1)
+        long long dist1;
+        for(int i=0;i<2;i++) {
+            cout << "? L " << MAX << '\n' << flush;
+            cin >> dist1;
+        }
+        for(int i=0;i<2;i++) {
+            cout << "? U " << MAX << '\n' << flush;
+            cin >> dist1;
+        }
+
+        // 20억-c+x + 20억-d+y = 오른쪽 위 거리 (dist2)
+        long long dist2;
+        for(int i=0;i<4;i++) {
+            cout << "? R " << MAX << '\n' << flush;
+            cin >> dist2;
+        }
+
+        // x-y = 40억 + a - b - dist1
+        // -x-y = 40억 - c - d - dist2
+        cout << "! " << (p1.x-p1.y-dist1+p2.x+p2.y+dist2)/2 << ' ' << (8*MAX+p1.x-p1.y-dist1-p2.x-p2.y-dist2)/(-2) << '\n' << flush;
+    }
+}
+```
+
+# [Gold III] Dominating Duos
+
+[문제 링크](https://www.acmicpc.net/problem/21138) 
+
+## 문제 설명
+
+<p>A group of people are standing in a line. Each person has a distinct height. You would like to count the number of unordered pairs of people in the line such that they are taller than everyone in between them in the line.</p>
+
+<p>More formally, let $d$ be a sequence of the heights of the people in order from left to right. We want to count the number of pairs of indices $i$ and $j$ with $i < j$ such that for all $k$ with $i < k < j$, $d_i > d_k$ and $d_j > d_k$. Note that if $j = i + 1$ (<em>i.e.</em>, there are no $k$’s between $i$ and $j$), it is trivially true.</p>
+
+## 입력 
+
+ <p>The first line of input contains an integer $n$ ($2 \le n \le 10^6$), which is the number of people.</p>
+
+<p>Each of the next n lines contains a single integer $d_i$ ($1 \le d_i \le n$). These are the heights of the people in the group, in the order in which they’re standing. The sequence is guaranteed to be a permutation of the integers $1$ through $n$.</p>
+
+## 출력 
+
+ <p>Output a single integer, which is the number of pairs of people who are taller than everyone between them.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n; cin >> n;
+
+    int cnt=n-1;
+    vector<int> lds;
+    for(int i=0;i<n;i++) {
+        int a; cin >> a;
+
+        int popCnt=0;
+        while(!lds.empty() && lds.back()<a) {
+            popCnt++;
+            lds.pop_back();
+        }
+        if(!lds.empty()) cnt += popCnt;
+        else cnt += max(0, popCnt-1);
+
+        lds.push_back(a);
+    }
+    cout << cnt;
+}
+```
+
+# [Gold II] 너무 시시했다
+
+[문제 링크](https://www.acmicpc.net/problem/25367) 
+
+## 문제 설명
+
+<p>영욱이는 민성이에게 다음과 같은 문제를 냈다.</p>
+
+<blockquote>
+<p>음이 아닌 두 정수 <i>x</i>와 <i>y</i>에 대해서 <em>a </em>+ <em>b </em>= <em>x</em>이고 <em>a </em>^ <em>b </em>= <em>y</em>인 음이 아닌 두 정수의 순서쌍 (<em>a</em>,<em> b</em>)는 모두 몇 개일까? (단, ^는 bitwise xor이다.)</p>
+</blockquote>
+
+<p>민성이는 이 문제가 너무 시시했다. 그러니 여러분이 대신 풀어 주자. 한 문제만 푸는 건 너무 시시하니까, <em>q</em> 문제를 동시에 풀어서 그나마 흥을 돋워 보자.</p>
+
+## 입력 
+
+ <p>첫 번째 줄에 질문의 수 <em>q</em>가 주어진다.</p>
+
+<p>두 번째 줄부터 (<em>q</em> + 1) 번째 줄까지 각 줄에 각 질문의 <em>x</em>와 <em>y</em>가 공백으로 구분되어 차례로 주어진다.</p>
+
+## 출력 
+
+ <p>각 질문에 대해 조건에 맞는 (<em>a</em>, <em>b</em>)<em> </em>쌍의 개수를 구하여 한 줄에 하나씩 차례로 출력한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+ll x, y;
+
+ll solve() {
+    // x = A+B = A^B + (A&B)<<1
+    // (A&B)<<1 = x-y
+    if(y>x || (x-y)&1) return 0;
+
+    ll ret=1;
+    ll tmp = x-y >> 1;
+    while(tmp || y) {
+        if(y&1) {
+            if(tmp&1) return 0;
+            ret<<=1;
+        }
+        tmp>>=1; y>>=1;
+    }
+    return ret;
+}
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t;
+    while(t--) {
+        cin >> x >> y;
+        cout << solve() << '\n';
+    }
+}
+```
+
+# A - Misdelivery
+[문제 링크](https://atcoder.jp/contests/abc421/tasks/abc421_a)
+
+## Problem Statement
+Mansion AtCoder has \$N\$ rooms numbered from room \$1\$ to room \$N\$.
+Each room \$i\$ is inhabited by one person named \$S\_i\$.
+
+You are to deliver a package addressed to Mr./Ms. \$Y\$ in room \$X\$. Determine whether the destination is correct.
+
+## Constraints
+* \$1 \le N \le 100\$
+* \$1 \le X \le N\$
+* \$N\$ and \$X\$ are integers.
+* \$S\_i\$ and \$Y\$ are strings consisting of lowercase English letters with length between \$1\$ and \$10\$, inclusive.
+
+## Input
+The input is given from Standard Input in the following format:
+
+\$N\$  
+\$S\_1\$  
+\$S\_2\$  
+\$\vdots\$  
+\$S\_N\$  
+\$X\ \ Y\$
+
+## Output
+Print `Yes` if the name of the person living in room \$X\$ is \$Y\$, and `No` otherwise.
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n; cin >> n;
+    vector<string> v(n);
+    for(int i=0;i<n;i++) cin >> v[i];
+
+    int idx; string s; cin >> idx >> s;
+
+    if(v[idx-1].compare(s)==0) cout << "Yes";
+    else cout << "No";
+}
+```
+
+# B - Fibonacci Reversed
+[문제 링크](https://atcoder.jp/contests/abc421/tasks/abc421_b)
+
+## Problem Statement
+For a positive integer \$x\$, define \$f(x)\$ as follows:
+
+* Let \$s\_x\$ be the string obtained by representing \$x\$ in decimal notation (without leading zeros), and let \$\mathrm{rev}(s\_x)\$ be the string obtained by reversing \$s\_x\$.
+  The value of \$f(x)\$ is the integer obtained by interpreting \$\mathrm{rev}(s\_x)\$ as a decimal representation of an integer.
+
+For example, when \$x=13\$, we have \$\mathrm{rev}(s\_x)=\texttt{31}\$, so \$f(x)=31\$; when \$x=10\$, we have \$\mathrm{rev}(s\_x)=\texttt{01}\$, so \$f(x)=1\$.
+Particularly, for any positive integer \$x\$, the value of \$f(x)\$ is a positive integer.
+
+You are given positive integers \$X\$ and \$Y\$.
+Define a sequence of positive integers \$A=(a\_1,a\_2,\dots,a\_{10})\$ as follows:
+
+* \$a\_1=X\$
+* \$a\_2=Y\$
+* \$a\_i=f(a\_{i-1}+a\_{i-2})\quad(i\ge 3)\$
+
+Find the value of \$a\_{10}\$.
+
+## Constraints
+* \$1\le X,Y\le 10^5\$
+* All input values are integers.
+
+## Input
+The input is given from Standard Input in the following format:
+
+\$X\ \ Y\$
+
+## Output
+Print the value of \$a\_{10}\$.
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+ll rev(ll x) {
+    string s = to_string(x);
+
+    ll ret=0;
+    for(int i=s.length()-1;i>=0;i--) ret = ret*10 + s[i]-'0';
+    return ret;
+}
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    ll x, y; cin >> x >> y;
+
+    for(int i=0;i<8;i++) {
+        ll tmp = rev(x+y);
+        x = y;
+        y = tmp;
+    }
+    cout << y;
+}
+```
+
+# C - Alternated
+[문제 링크](https://atcoder.jp/contests/abc421/tasks/abc421_c)
+
+## Problem Statement
+You are given a string \$S\$ of length \$2N\$. \$S\$ contains exactly \$N\$ occurrences of `A` and \$N\$ occurrences of `B`.
+
+Find the minimum number of operations (possibly zero) needed to make \$S\$ have no adjacent identical characters, where an operation consists of swapping two adjacent characters in \$S\$.
+
+## Constraints
+* \$1 \le N \le 5 \times 10^5\$
+* \$N\$ is an integer.
+* \$S\$ is a string of length \$2N\$ consisting of \$N\$ occurrences of `A` and \$N\$ occurrences of `B`.
+
+## Input
+The input is given from Standard Input in the following format:
+
+$N$  
+$S$
+
+## Output
+Print the answer.
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n; string s; cin >> n >> s;
+
+    ll evenCost=0, oddCost=0;
+    ll cnt=0;
+    for(int i=0;i<n*2;i++) {
+        if(s[i]=='A') {
+            evenCost += abs(cnt*2-i);
+            oddCost += abs(cnt*2+1-i);
+            cnt++;
+        }
+    }
+    cout << min(evenCost, oddCost);
+}
+```
+
+# [Silver IV] 캠프가는 영식
+
+[문제 링크](https://www.acmicpc.net/problem/1590) 
+
+## 문제 설명
+
+<p>영식이는 민식이와 함게 고속버스를 타고 캠프를 가야 하지만, 민식이는 영식이를 깨우지 않고 혼자 버스를 타고 캠프에 가버렸다.</p>
+
+<p>영식이는 혼자 고속버스터미널까지 가서 캠프에 오려고 한다. 터미널에는 캠프 장소까지 운행하는 N가지의 버스가 있다. 각각의 버스는 시작 시각, 간격, 대수의 정보를 가지고 있다. 예를 들어, 어떤 버스의 시작 시각이 특점 시점을 기준으로 10분 후이고, 간격은 10분이고, 대수가 5대이면, 이 버스는 10분, 20분, 30분, 40분, 50분에 한 대씩 출발한다.</p>
+
+<p>영식이는 버스터미널에 T분에 도착했다. 영식이가 버스를 타려면 최소 몇 분을 더 기다려야 하는지 구하는 프로그램을 작성하시오.</p>
+
+## 입력 
+
+ <p>첫째 줄에 버스의 개수 N과 영식이가 버스터미널에 도착하는 시간 T가 주어진다. 둘째 줄부터 총 N개의 줄에 각 버스의 시작 시각 S<sub>i</sub>, 간격 I<sub>i</sub>, 대수 C<sub>i</sub>가 공백을 사이에 두고 주어진다.</p>
+
+## 출력 
+
+ <p>첫째 줄에 영식이가 기다려야 하는 시간을 출력한다. 영식이가 도착하는 동시에 버스가 출발하면 정답은 0이다. 만약 버스가 없어서 캠프에 갈 수 없으면 -1을 출력한다. 정답은 2<sup>31</sup>보다 작다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n, t; cin >> n >> t;
+    int minT = INT_MAX;
+    while(n--) {
+        int s, i, c; cin >> s >> i >> c;
+        for(int cnt=0;cnt<c;cnt++) {
+            if(t<=s+i*cnt) minT = min(minT, s+i*cnt);
+        }
+    }
+    cout << (minT==INT_MAX ? -1 : minT-t);
+}
+```
+
+# [Platinum IV] 블로그
+
+[문제 링크](https://www.acmicpc.net/problem/16157) 
+
+## 문제 설명
+
+<p>neighbor 블로그를 운영하는 디디는 매일 아침 풀고 싶은 문제를 미리 정해놓고 글을 올린다. 그리고 매일 밤 각각의 문제에 대하여, 스스로 해결한 경우 파란색, 도움을 받아 해결한 경우 초록색, 해결하지 못한 경우 빨간색으로 칠한다. 디디는 각 문제를 칠할 때 아래와 같은 과정을 한 번의 작업으로 수행한다.</p>
+
+<ol>
+	<li>연속된 임의의 문제들을 선택한다.</li>
+	<li>선택된 문제들을 전부 원하는 같은 색으로 칠한다.</li>
+</ol>
+
+<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/8f502386-12e2-4f68-b353-93b66aa13dff/-/preview/"></p>
+
+<p>예를 들어, 각 문제를 위와 같은 색으로 칠할 때, 1번 문제를 초록색, 2번을 빨간색, 3~4번을 파란색, 5번을 초록색으로 순서대로 칠한다면 작업 횟수는 4번이지만, 1~5번 문제를 초록색, 2번을 빨간색, 3~4번을 파란색으로 순서대로 칠한다면 작업 횟수는 3번으로 가장 적다. 디디는 매일 100문제까지 시도하기 때문에, 이 작업이 꽤나 귀찮아지기 시작했다. 그래서 가장 효율적인 방법으로 위 작업을 수행하기를 원한다. 디디를 도와 각 문제를 주어진 색으로 칠할 때 필요한 최소한의 작업 횟수를 구하는 프로그램을 작성하라.</p>
+
+## 입력 
+
+ <p>첫째 줄에 색을 칠해야 하는 문제의 수 <em>N</em>(1 ≤ <em>N</em> ≤ 100)이 주어진다.</p>
+
+<p>둘째 줄에 <em>N</em>개의 문자가 공백없이 순서대로 주어진다. 각 문자는 <em>i</em>번째 문제를 어떤 색으로 칠해야 하는지를 의미하며, <code>R</code>은 빨간색, <code>G</code>는 초록색, <code>B</code>는 파란색을 나타낸다. 그 외에 다른 문자는 주어지지 않는다.</p>
+
+## 출력 
+
+ <p>첫째 줄에 디디가 주어진 모든 문제를 원하는 색으로 칠할 때까지 필요한 작업 횟수의 최솟값을 출력하라.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+const int INF = 0x3f3f3f3f;
+
+int dp[100][100]; // dp[L][R] : L ~ R 범위에 색을 채웠을 때의 최소 비용
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n; string s; cin >> n >> s;
+
+    fill(&dp[0][0], &dp[99][100], INF);
+    for(int i=0;i<n;i++) dp[i][i]=1;
+
+    for(int len=2;len<=n;len++) {
+        for(int left=0;left+len-1<n;left++) {
+            for(int beforeLen=1;beforeLen<len;beforeLen++) {
+                dp[left][left+len-1] = min(dp[left][left+len-1], dp[left][left+beforeLen-1] + dp[left+beforeLen][left+len-1] - (s[left] == s[left+len-1]));
+            }
+        }
+    }
+    cout << dp[0][n-1];
+}
+```
+
+# [Platinum III] 전구
+
+[문제 링크](https://www.acmicpc.net/problem/2449) 
+
+## 문제 설명
+
+<p>최대 K가지의 서로 다른 색을 표현할 수 있는 전구들이 있다. 이 전구 N개를 다음의 그림과 같이 한 줄로 배치하여 서로 연결한다. (동그라미 안의 숫자는 전구의 색을 의미한다)</p>
+
+<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/e26b54ab-f266-4fd6-9499-49bbc9b4b5d1/-/preview/" style="width: 272px; height: 42px;"></p>
+
+<p>각 전구는 스위치가 있어서 전구의 색을 임의의 색으로 바꿀 수 있다. 하나의 전구 색을 바꾸는 경우에는, 색이 바뀌는 전구에 인접한 전구가 같은 색이면, 이 전구의 색도 같이 바뀌게 되며 인접한 전구가 다른 색이 나올 때까지 계속 바뀌게 된다. 예를 들어, 위의 그림에서 4번 전구의 색을 2번 색으로 바꾸면, 5번 전구가 4번 전구와 같은 색이었으므로 2번 색으로 바뀌고, 6번 전구도 5번 전구와 같은 색이었으므로 2번 색으로 바뀌게 된다. 즉, 4번 전구의 색을 2번 색으로 바꾸면, 연결된 같은 색의 모든 전구인 4, 5, 6번의 전구가 2번 색으로 바뀌게 되어 아래의 그림과 같이 된다.</p>
+
+<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/beb9f162-a3dd-4ab7-b111-5f70af86c750/-/preview/" style="width: 272px; height: 43px;"></p>
+
+<p>전구의 수 N과 N개의 전등에 대한 초기 색이 주어질 때, 모든 전구의 색이 하나로 같아질 때까지 최소 몇 번 전구의 색을 바꾸어야 하는지를 구하는 프로그램을 작성하시오. 단, 전구의 각 색은 1부터 K까지의 정수로 나타낸다.</p>
+
+## 입력 
+
+ <p>입력의 첫 번째 줄에는 전구의 수를 나타내는 양의 정수 N과 전구가 표현할 수 있는 색의 수 K가 주어진다. 단, N은 1이상 200이하의 정수이며, K는 1이상 20이하의 정수이다. 두 번째 줄에는 N개 전구의 색이 전구번호의 순서대로 하나의 정수로 하나의 빈칸을 사이에 두고 주어진다.</p>
+
+## 출력 
+
+ <p>첫째 줄에 모든 전구의 색이 하나로 같아질 때까지 전구의 색을 바꾸는 횟수의 최솟값을 하나의 정수로 출력한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+const int INF = 0x3f3f3f3f;
+
+int dp[201][201]; // dp[L][R] : L ~ R에 색이 전부 채워졌을 때의 최소 연산 횟수+1
+int color[201];
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n, k; cin >> n >> k;
+
+    fill(&dp[0][0], &dp[200][201], INF);
+    for(int i=1;i<=n;i++) {
+        cin >> color[i];
+        dp[i][i]=1;
+    }
+
+    for(int len=2;len<=n;len++) {
+        for(int left=1;left+len-1<=n;left++) {
+            for(int leftLen=1;leftLen<len;leftLen++) {
+                dp[left][left+len-1] = min(dp[left][left+len-1], dp[left][left+leftLen-1] + dp[left+leftLen][left+len-1] - (color[left] == color[left+len-1]));
+            }
+        }
+    }
+    cout << dp[1][n]-1;
+}
+```
+
+# [Platinum I] 塗り箸 (Chopsticks)
+
+[문제 링크](https://www.acmicpc.net/problem/24137) 
+
+## 문제 설명
+
+<p>漆塗りお箸協会 (Japan Ohashi Institute) は，お箸の国際普及のためにデザインされたお箸 を用意することになった．お箸のうち，彩色される部分は一端から長さ Nmm にわたる部分で， 1mm ごとに色が定まっており，色が塗られない部分はない．また，お箸の彩色に使用する漆の 色は 52 色である．</p>
+
+<p>漆塗り職人のあなたは，決められた色の通りに，お箸を塗る作業を依頼された．漆塗りには 手間がかかるため，なるべく少ない作業回数でお箸を完成させたい．</p>
+
+<p>お箸を塗るための 1 作業とは，連続する区間を選び，その区間すべてを一色で塗ることであ る．この際，すでに色が塗られていた場所も必ず新しい色となる．お箸を完成させるために必 要な作業回数の最小値を求めるプログラムを書け．</p>
+
+## 입력 
+
+ <p>入力の 1 行目には 1 つの整数 N (1 ≤ N ≤ 300) が書かれて いる．これはお箸の彩色される部分の長さが Nmm であることを表す．</p>
+
+<p>2 行目には，N 文字からなる英字 (A～Z, a～z) の列が与えられる．文字列の i 文字目が端から (i − 1)mm から imm までの色を表す．</p>
+
+## 출력 
+
+ <p>出力は，標準出力に行うこと．作業回数の最小値を表す 1 つの整数を出力せよ．</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+const int INF = 0x3f3f3f3f;
+
+int dp[300][300];
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n; string s; cin >> n >> s;
+
+    fill(&dp[0][0], &dp[299][300], INF);
+    for(int i=0;i<n;i++) dp[i][i]=1;
+
+    for(int len=2;len<=n;len++) {
+        for(int left=0;left+len-1<n;left++) {
+            for(int leftLen=1;leftLen<len;leftLen++) {
+                dp[left][left+len-1] = min(dp[left][left+len-1], dp[left][left+leftLen-1] + dp[left+leftLen][left+len-1] - (s[left] == s[left+len-1]));
+            }
+        }
+    }
+    cout << dp[0][n-1];
+}
+```
+
+# [Gold II] 턴 게임 2
+
+[문제 링크](https://www.acmicpc.net/problem/12966) 
+
+## 문제 설명
+
+<p>윤호와 동혁이는 BOJ 알고리즘 캠프에 참가중이다. 두 사람은 문제가 너무 안 풀릴 때는 게임을 하고 문제를 풀기도 한다.</p>
+
+<p>게임은 턴으로 이루어져 있으며, 각 턴의 승자는 두 사람 중에 한 사람이다. i번째 턴을 승리한 사람은 점수 2×i-1점을 갖게 되고, 턴은 1부터 시작한다.</p>
+
+<p>두 정수 x와 y가 주어졌을 때, 윤호의 점수가 x, 동혁이의 점수가 y가 되는 것이 가능한지 불가능한지 구하는 프로그램을 작성하시오. 만약, 가능하다면 윤호가 최소 몇 번 이겨야 하는지도 구하시오.</p>
+
+## 입력 
+
+ <p>첫째 줄에 두 정수 x와 y가 주어진다. (0 ≤ x, y ≤ 10<sup>12</sup>)</p>
+
+## 출력 
+
+ <p>윤호가 최소 몇 번 이겨야 하는지 출력한다. 불가능한 경우에는 -1을 출력한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    ll a, b; cin >> a >> b;
+
+    ll x = sqrt(a+b);
+    if(a+b != x*x) {
+        cout << -1;
+        return 0;
+    }
+
+    int cnt=0;
+    x = x*2-1;
+    while(x>=1) {
+        if(a>=x && a-x!=2) {
+            cnt++;
+            a -= x;
+        }
+        x-=2;
+    }
+    if(a) cout << -1;
+    else cout << cnt;
+}
+```
+
+# [Bronze V] 찾아오시는 길
+
+[문제 링크](https://www.acmicpc.net/problem/34217) 
+
+## 문제 설명
+
+<p>2025 숭고한 연합 알고리즘 경진대회가 열리는 한양대학교 ITBT관은 서울 지하철 2호선 한양대역에서 멀리 떨어져 있어, 몇몇 학생들은 서울 지하철 2호선 용답역에서 내려 통학한다.</p>
+
+<p>어느 역에서 내리면 더 일찍 도착할 수 있는지 구해보자!</p>
+
+## 입력 
+
+ <p>첫째 줄에 출발지에서 한양대역까지 걸리는 시간 $A$, 출발지에서 용답역까지 걸리는 시간 $B$가 공백으로 구분되어 주어진다. ($1\leq A,B\leq 1\, 000$)</p>
+
+<p>둘째 줄에 한양대역에서 ITBT관까지 걸리는 시간 $C$, 용답역에서 ITBT관까지 걸리는 시간 $D$가 공백으로 구분되어 주어진다. ($1\leq C,D\leq 30$)</p>
+
+<p>주어지는 수는 모두 정수이다.</p>
+
+## 출력 
+
+ <p>첫째 줄에 한양대역에서 하차하는 게 더 빠르다면 <code><span style="color:#e74c3c;">Hanyang Univ.</span></code>를, 용답역에서 하차하는 게 더 빠르다면 <code><span style="color:#e74c3c;">Yongdap</span></code>을, 걸리는 시간이 같다면 <code><span style="coloWr:#e74c3c;">Either</span></code>를 출력한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int a, b, c, d; cin >> a >> b >> c >> d;
+    if(a+c<b+d) cout << "Hanyang Univ.";
+    else if(a+c>b+d) cout << "Yongdap";
+    else cout << "Either";
+}
+```
+
+# [Bronze III] 숭고한에 어서오세요
+
+[문제 링크](https://www.acmicpc.net/problem/34236) 
+
+## 문제 설명
+
+<p>숭고한 알고리즘 경진대회는 일정하게 $x$년을 주기로 한 번씩 열리는 것으로 알려져 있다. </p>
+
+<p>지금까지 숭고한 알고리즘 경진대회가 열린 년도 $A_1, A_2, \ldots , A_N$이 시간 순서대로 주어진다. 주기가 일정하지 않은 년도가 주어지거나 같은 년도가 두 번 이상 주어지는 경우는 없다. 즉, $A$는 공차가 양수인 등차수열이다. 다음 대회도 $x$년 주기로 열릴 것이라 가정했을 때, 몇 년도에 열릴지 예상하라.</p>
+
+## 입력 
+
+ <p>첫째 줄에 대회가 열린 년도의 개수 $N$이 주어진다. $(2 \leq N \leq 100)$</p>
+
+<p>둘째 줄에 대회가 열린 년도 $A_1, A_2, \ldots , A_N$이 공백으로 구분되어 주어진다. $1 \leq i < N$인 모든 $i$에 대해, $A_i < A_{i+1}$이다. $(1 \leq A_i \leq 2025)$ </p>
+
+## 출력 
+
+ <p>첫째 줄에 다음 대회가 열릴 것으로 예상되는 년도를 출력한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n, a, b; cin >> n >> a >> b;
+    while(n-->2) {
+        a = b;
+        cin >> b;
+    }
+    cout << b + (b-a);
+}
+```
+
+# [Bronze IV] SUAPC 의자 준비하기
+
+[문제 링크](https://www.acmicpc.net/problem/34183) 
+
+## 문제 설명
+
+<p>&#39;모빌진&#39;은 AUTOSAR 표준을 따르는 현대오토에버의 차량 소프트웨어 브랜드로서, 현대차&middot;기아&middot;제네시스 등 현대차그룹의 모든 양산 차에 적용되고 있다.</p>
+
+<p>2024년 10월, 국내 최초로 &#39;모빌진 클래식 2.0&#39;이 A-SPICE 레벨3 인증을 획득했고, 올해 1월에는 &#39;모빌진 어댑티브&#39;, 6월 30일에는 &#39;모빌진 클래식&#39;이 자동차 기능 안전 국제표준 인증 최고 등급인 &#39;ASIL(Automotive Safety Integrity Level)-D&#39;를 인증 획득하며 글로벌 수준의 차량 소프트웨어 기술력을 자랑했다.</p>
+
+<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/44c42607-c797-4aae-956b-f6e80c5e8f71/-/preview/" /></p>
+
+<p>호현이는 모빌진 소프트웨어 플랫폼이 탑재된 차량을 이용하여 SUAPC 대면 대회 때 참가자들이 앉을 수 있는 의자를 준비하려고 한다. SUAPC에는 $N$개의 팀이 참가하며, 각 팀 당 3개의 의자가 필요하다. 현재 호현이는 $M$개의 의자를 가지고 있다. 의자를 추가로 구매하려면, 개당 $A$원의 가격과 별도로 운송비 $B$원을 지불해야 한다. 구매할 의자 개수에 상관없이 의자 운송 비용은 한 번만 지불한다고 할 때, 호현이가 SUAPC에 필요한 의자를 준비하기 위해 필요한 최소 금액은 얼마일까?</p>
+
+## 입력 
+
+<p>첫 번째 줄에 정수 $N$, $M$, $A$, $B$가 주어진다. $(1\le N\le 45;\ 0\le M\le 200;\ 1\le A,B\le 10^6)$</p>
+
+## 출력 
+
+<p>첫 번째 줄에 필요한 최소 금액을 출력한다. 단, 의자를 구매할 필요가 없는 경우 $0$을 출력한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n, m, a, b; cin >> n >> m >> a >> b;
+
+    if(n*3>m) cout << (n*3-m)*a+b;
+    else cout << 0;
+}
+```
+
+# [Bronze II] 호참전
+
+[문제 링크](https://www.acmicpc.net/problem/34237) 
+
+## 문제 설명
+
+<p>호랑이와 참새는 매년 친선 경기인 "호참전"을 진행한다! 호참전은 여러 경기로 이루어지며, 매년 전체 경기 수는 달라진다. 각 경기에서 승자는 $1$점을, 패자는 $0$점을 얻으며, 비기는 경우는 없다.</p>
+
+<p>올해 호참전을 앞두고 $N$마리의 아기 호랑이들이 베팅을 한다. 어떤 아기 호랑이가 $a\ b$ 라고 베팅하면 호참전 진행 중에 정확히 $a:b$가 되는 순간이 존재할 경우 베팅에서 승리하게 된다. 아기 호랑이들은 호랑이가 참새를 상대로 질 것이라고는 생각하지 않기 때문에, 모든 아기 호랑이들의 베팅에 대해 $a \ge b$가 성립한다.</p>
+
+<p>윤헌이는 올해 아기 호랑이들의 베팅이 얼마나 잘 들어맞는지 궁금해졌다. 그래서 지난 $M$년간의 호참전 기록을 살펴보고, 만약 그때도 올해와 똑같이 베팅했다면 몇 마리가 이길 수 있었는지 알아보기로 했다.</p>
+
+<p>$M$년간의 호참전에 대한 정보가 주어진다. 제 $i$회 호참전에 대한 정보는 총 게임 수 $g_i$와, 해당 호참전의 특정 시점의 스코어 $x_i : y_i$로 주어진다. 이 스코어에서 호참전이 재개되었을 때, 몇 마리의 아기 호랑이들이 베팅에서 이기는지를 알아볼 것이다. 윤헌이는 올해 호참전에서 호랑이가 참새를 이길 것이라고 생각하기 때문에, 비슷한 상황을 가정하기 위해 각 호참전에서 $x_i \ge y_i$인 순간들만을 선정하였다.</p>
+
+<p>이때 아기 호랑이들이 올해와 같은 베팅을 했다고 가정할 때, 승리할 수 있는 아기 호랑이의 수를 구하여라. 어떤 베팅 $a:b$가 <strong data-end="807" data-start="792">승리할 가능성이 있다</strong>는 것은, 시작 스코어가 $(x, y)$이고 총 경기 수가 $g$일 때</p>
+
+<p style="text-align: center;"><strong>$x \leq a; y \leq b; a+b \leq g$</strong></p>
+
+<p>를 만족함을 의미한다. 위의 세 가지 조건을 모두 만족해야 함에 유의하라.</p>
+
+## 입력 
+
+ <p>첫째 줄에 아기 호랑이의 마릿수 $N$, 기록을 살펴볼 호참전의 횟수 $M$이 공백으로 구분되어 주어진다. $(1 \leq N \leq 50$; $ 1 \leq M \leq 100\,000)$</p>
+
+<p>다음 $N$개의 줄의 $i$번째 줄에는, $i$번 아기 호랑이의 베팅 $a_i, b_i$가 공백으로 구분되어 주어진다. $(0 \leq b_i \leq a_i \leq 100$; $ a_i + b_i \leq 100)$</p>
+
+<p>다음 $M$개의 줄의 $j$번째 줄에는, 제 $j$회 호참전의 총 경기 수 $g_j$, 그리고 해당 호참전의 특정 시점의 스코어 $x_j, y_j$가 공백으로 구분되어 주어진다. $(0 \leq y_j \leq x_j$; $ 0 \leq x_j + y_j \leq g_j \leq 100)$</p>
+
+## 출력 
+
+ <p>$i$번째 줄에 제 $i$회 호참전에서 올해와 동일하게 베팅했을 때 베팅에서 승리할 가능성이 있는 아기 호랑이들의 마릿수를 출력한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+struct batting {
+    int a, b;
+};
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n, m; cin >> n >> m;
+    vector<batting> v(n);
+    for(int i=0;i<n;i++) cin >> v[i].a >> v[i].b;
+
+    while(m--) {
+        int g, a, b; cin >> g >> a >> b;
+
+        int cnt=0;
+        for(int i=0;i<n;i++) {
+            if(v[i].a>=a && v[i].b>=b && v[i].a+v[i].b<=g) cnt++;
+        }
+        cout << cnt << '\n';
+    }
+}
+```
+
+# [Silver V] Find the Fox
+
+[문제 링크](https://www.acmicpc.net/problem/34238) 
+
+## 문제 설명
+
+<p>$N$행 $M$열의 글자판이 주어지고, 글자판의 각 칸에는 영어 알파벳 <span style="color:#e74c3c;"><code>F</code></span>, <span style="color:#e74c3c;"><code>O</code></span>, <span style="color:#e74c3c;"><code>X</code></span> 중 하나가 쓰여 있다.</p>
+
+<p>당신은 이 글자판에서 영단어 <span style="color:#e74c3c;"><code>FOX</code></span>를 모두 찾아야 한다. <span style="color:#e74c3c;"><code>FOX</code></span>는 다음과 같은 규칙으로 찾아야 한다.</p>
+
+<ol>
+	<li>처음에 알파벳 <span style="color:#e74c3c;"><code>F</code></span>를 선택한다.</li>
+	<li>1에서 선택한 <code><span style="color:#e74c3c;">F</span></code>와 상하좌우/대각선으로 인접한 알파벳 <code><span style="color:#e74c3c;">O</span></code>를 선택한다.</li>
+	<li>2에서 선택한 <code><span style="color:#e74c3c;">O</span></code>와 상하좌우/대각선으로 인접한 알파벳 <span style="color:#e74c3c;"><code>X</code></span>를 선택한다.</li>
+	<li>1, 2, 3 에서 선택한 <span style="color:#e74c3c;"><code>F</code></span>,<span style="color:#e74c3c;"> <code>O</code></span>,<span style="color:#e74c3c;"> <code>X</code></span>가 모두 같은 행, 또는 같은 열, 또는 같은 대각선에 있을 경우 <span style="color:#e74c3c;"><code>FOX</code></span>를 하나 찾은 것이다.</li>
+</ol>
+
+<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/2acbf3ba-96f4-4513-b46b-96a7ce2f2fdc/-/preview/" style="height: 205px; width: 600px;"></p>
+
+<p>위 그림은 <span style="color:#e74c3c;"><code>FOX</code></span>를 바르게 찾은 예시이다.</p>
+
+<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/1b223db6-eb5d-45e9-9688-68bcbfb3c937/-/preview/" style="height: 71px; width: 600px;"></p>
+
+<p>위 그림은 <span style="color:#e74c3c;"><code>FOX</code></span>를 바르게 찾은 예시가 아닌 것들이다.</p>
+
+<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/cf47b2dc-5989-45df-bb8b-f3215095991b/-/preview/" style="height: 171px; width: 600px;"></p>
+
+<p>위 그림처럼 알파벳의 배치에 따라 한 알파벳이 여러 개의 <span style="color:#e74c3c;"><code>FOX</code></span>에 포함될 수도 있다. 겹쳐진 <span style="color:#e74c3c;"><code>FOX</code></span>들도 모두 구분해서 세어야 한다.</p>
+
+<p>글자판이 주어지면 <span style="color:#e74c3c;"><code>FOX</code></span>가 모두 몇 개 있는지 구하여라.</p>
+
+## 입력 
+
+ <p>첫째 줄에 글자판의 행과 열의 수 $N,M$이 공백으로 구분되어 주어진다. $(3 \leq N,M \leq 100)$</p>
+
+<p>둘째 줄부터 $N$개의 줄에 걸쳐 글자판의 각 칸에 쓰인 알파벳이 각 행마다 $M$개 주어진다. 주어지는 알파벳은 모두 영어 알파벳 대문자 <span style="color:#e74c3c;"><code>F</code></span>, <span style="color:#e74c3c;"><code>O</code></span>, <span style="color:#e74c3c;"><code>X</code></span> 중 하나이다.</p>
+
+## 출력 
+
+ <p>첫째 줄에 글자판에서 찾을 수 있는 <span style="color:#e74c3c;"><code>FOX</code></span>의 총 개수를 출력한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+string s[100];
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n, m; cin >> n >> m;
+    for(int i=0;i<n;i++) cin >> s[i];
+
+    int cnt=0;
+    for(int i=0;i<n;i++) {
+        for(int j=0;j<m;j++) {
+            if(j+2<m && s[i][j]=='F' && s[i][j+1]=='O' && s[i][j+2]=='X') cnt++;
+            if(j-2>=0 && s[i][j]=='F' && s[i][j-1]=='O' && s[i][j-2]=='X') cnt++;
+            if(i+2<n && s[i][j]=='F' && s[i+1][j]=='O' && s[i+2][j]=='X') cnt++;
+            if(i-2>=0 && s[i][j]=='F' && s[i-1][j]=='O' && s[i-2][j]=='X') cnt++;
+
+            if(i+2<n && j+2<m && s[i][j]=='F' && s[i+1][j+1]=='O' && s[i+2][j+2]=='X') cnt++;
+            if(i+2<n && j-2>=0 && s[i][j]=='F' && s[i+1][j-1]=='O' && s[i+2][j-2]=='X') cnt++;
+            if(i-2>=0 && j+2<m && s[i][j]=='F' && s[i-1][j+1]=='O' && s[i-2][j+2]=='X') cnt++;
+            if(i-2>=0 && j-2>=0 && s[i][j]=='F' && s[i-1][j-1]=='O' && s[i-2][j-2]=='X') cnt++;
+        }
+    }
+    cout << cnt;
+}
+```
+
+# [Silver V] 네모난 순열 찾기 1
+
+[문제 링크](https://www.acmicpc.net/problem/34231) 
+
+## 문제 설명
+
+<p>$N^2$개의 수가 $N$행 $N$열의 표 $A$에 채워져 있다. 표의 위에서부터 $r$번째 행, 왼쪽에서부터 $c$번째 열에 위치한 칸에는 정수 $A_{r,c}$가 적혀 있으며, $r$행 $c$열을 편의상 $(r,c)$로 표현한다.</p>
+
+<p>표 $A$에서 직사각형 맨 왼쪽 위 칸이 $(r_1,c_1)$이고, 맨 오른쪽 아래 칸이 $(r_2,c_2)$가 되게 직사각형을 선택할 때, $1\leq r_1\leq r\leq r_2\leq N,1\leq c_1\leq c\leq c_2\leq N$ 을 만족하는 $A_{r,c}$는 직사각형 안에 있는 수이다.</p>
+
+<p>수 $x$개로 이루어진 배열이 $1$부터 $x$까지의 서로 다른 정수 $x$개로 이루어져 있다면, 순열이다. 예를 들어 $[2,3,1,5,4]$는 순열이지만, $[1,2,2]$와 $[1,3,4]$는 순열이 아니다.</p>
+
+<p>직사각형의 네 변이 표의 경계선과 겹치도록 직사각형을 선택할 때, 직사각형 안에 있는 수를 나열한 것이 순열이 되는 경우의 수는 얼마일까?</p>
+
+## 입력 
+
+ <p>첫째 줄에 표 $A$의 행과 열의 개수 $N$이 주어진다. ($1\leq N\leq 15$)</p>
+
+<p>이후 $N$개의 줄에 걸쳐 $i+1$번째 줄에 $A_{i,1},A_{i,2},\ldots ,A_{i,N}$이 공백으로 구분되어 주어진다. ($1\leq A_{i,j}\leq N^2$)</p>
+
+## 출력 
+
+ <p>첫째 줄에 경우의 수를 출력한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int A[15][15];
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n; cin >> n;
+    for(int i=0;i<n;i++) for(int j=0;j<n;j++) cin >> A[i][j];
+
+    int cnt=0;
+    for(int i=0;i<n;i++) {
+        for(int j=0;j<n;j++) {
+            for(int k=i;k<n;k++) {
+                for(int l=j;l<n;l++) {
+                    set<int> nums;
+                    for(int r=i;r<=k;r++) for(int c=j;c<=l;c++) nums.insert(A[r][c]);
+                    if(nums.size() == (k-i+1)*(l-j+1) && *nums.begin()==1 && *(prev(nums.end()))==nums.size()) cnt++;
+                }
+            }
+        }
+    }
+    cout << cnt;
+}
+```
+
+# [Silver IV] 현대모비스 부품 조립
+
+[문제 링크](https://www.acmicpc.net/problem/34225) 
+
+## 문제 설명
+
+<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/4b599140-e7e0-4818-860f-94dade57e0da/-/preview/" style="height: 121px; width: 350px; margin-top: 20px; margin-bottom: 20px;"></p>
+
+<blockquote><em>현대모비스에선 최적의 모듈 개발로 자동차 업체의 플랫폼 및 부품 공용화를 위한 핵심기술을 연구하고 있어 생산성 향상 및 품질 향상을 극대화합니다.</em></blockquote>
+
+<p>자동차 조립 전문가인 당신은 $N$개의 차량 모듈을 가지고 있다. $i$번째 모듈은 $A_i$만큼의 효율성을 가진다.</p>
+
+<p>당신은 $1$개 이상의 모듈을 골라 조립해 자동차를 만들어야 한다. 이때, 하나의 모듈을 두 번 이상 고를 수는 없다. 당신이 조립한 자동차는 세 명의 연구원 숭돌이, 고돌이, 한돌이에게 철저한 심사를 받는다.</p>
+
+<p>구체적으로, 각 연구원은 다음과 같은 기준으로 자동차의 점수를 매긴다.</p>
+
+<ul>
+	<li>숭돌이는 자동차에서 효율성이 <strong>가장 낮은</strong> 차량 모듈의 효율성만큼 점수를 준다.</li>
+	<li>고돌이는 자동차에서 효율성이 <strong>가장 높은</strong> 차량 모듈의 효율성만큼 점수를 준다.</li>
+	<li>한돌이는 자동차에 사용된 모든 차량 모듈의 효율성의 <strong>합</strong>만큼 점수를 준다.</li>
+</ul>
+
+<p>자동차의 점수는 세 연구원이 자동차에 매긴 점수를 모두 합한 값이다.</p>
+
+<p>모든 차량 모듈의 효율성이 주어졌을 때, 어떻게 자동차를 조립해야 최고 점수를 받을 수 있는지 구하여라.</p>
+
+## 입력 
+
+ <p>첫째 줄에 차량 모듈의 개수 $N$이 주어진다. $(1 \leq N \leq 200\,000)$</p>
+
+<p>둘째 줄에 각 차량 모듈의 효율성을 나타내는 정수 $A_1, A_2, ..., A_N$이 공백으로 구분되어 주어진다. $(1 \leq A_i \leq 10^9)$</p>
+
+## 출력 
+
+ <p>첫째 줄에 최고 점수를 받는 자동차에 들어가는 차량 모듈의 개수를 출력한다.</p>
+
+<p>둘째 줄에 자동차에 들어가는 차량 모듈의 번호를 아무 순서로 공백으로 구분하여 출력한다.</p>
+
+<p>가능한 답이 여러 가지라면, 그중 아무것이나 출력한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+struct element {
+    ll val, idx;
+    bool operator<(const element e) const {
+        return val > e.val;
+    }
+};
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n; cin >> n;
+    vector<element> v(n);
+    for(int i=0;i<n;i++) {
+        cin >> v[i].val;
+        v[i].idx = i+1;
+    }
+    sort(v.begin(), v.end());
+
+    ll r=1, maxVal=v[0].val*3, preSum=v[0].val;
+    for(int i=1;i<n;i++) {
+        preSum += v[i].val;
+        if(maxVal < v[0].val+v[i].val+preSum) {
+            maxVal = v[0].val+v[i].val+preSum;
+            r=i+1;
+        }
+    }
+
+    cout << r << '\n';
+    for(int i=0;i<r;i++) cout << v[i].idx << ' ';
+}
+```
+
+# [Gold IV] 숭고한 마법학교
+
+[문제 링크](https://www.acmicpc.net/problem/34218) 
+
+## 문제 설명
+
+<p>숭고한 마법학교에서는 매년 8월 깊은 숲 속 대회장에서 마법 경진대회를 개최하고 있다! 2025년 숭고한 마법 경진대회의 운영진은 대회장에 도착하는 것도 대회의 일부라고 생각해, 참가자들에게 다음과 같이 공지했다.</p>
+
+<blockquote>
+<p>숲의 지도가 제공되지만, 대회장까지 이동하는 경로가 있음을 보장하지 않습니다. 필요에 따라 텔레포트 마법을 이용해 대회장에 도착해야 합니다.</p>
+</blockquote>
+
+<p>숲의 지도는 $N$행 $M$열의 2차원 격자 $A$로 주어진다. $1\leq r\leq N,1\leq c\leq M$을 만족하는 $r,c$에 대해, 격자 $A$의 $r$행 $c$열에는 $A_{r,c}$가 적혀 있으며, $r$행 $c$열을 편의상 $(r,c)$로 표현한다. $A_{r,c}$는 $0$ 또는 $1$이며, $1$인 경우는 지나갈 수 있는 칸을 의미하고 $0$인 경우 나무가 있어 지나갈 수 없는 칸을 의미한다. 나무가 없는 빈 공간으로는 상하좌우로 인접한 격자점으로만 이동할 수 있으며, 숲을 둘러싸는 결계가 있어 입구를 제외한 지점을 통해 숲으로 들어가거나 나갈 수 없다.</p>
+
+<p>텔레포트 마법을 통해 $(r_1,c_1)$에서 $(r_2,c_2)$로 이동할 때 $\left\vert r_1-r_2 \right\vert +\left\vert c_1-c_2 \right\vert$ 만큼 마나를 사용한다. 텔레포트 마법은 재사용에 매우 오랜 시간이 걸려, 단 한 번만 사용할 수 있다.</p>
+
+<p>대회에서 많은 마나를 사용할 예정이기에, 마나를 최소한으로 사용해 대회장에 도착해야 한다.</p>
+
+## 입력 
+
+ <p>첫 줄에 격자의 크기 $N$, $M$이 주어진다. ($2\leq N,M\leq 1\, 000$)</p>
+
+<p>이후 $N$개의 줄에 걸쳐 $i+1$번째 줄에 $A_{i,1},A_{i,2},\ldots ,A_{i,M}$이 공백으로 구분되어 주어진다. ($0\leq A_{ij}\leq 1$)</p>
+
+<p>다음 줄에 숲의 입구의 위치 $(s_r,s_c)$가 공백으로 구분되어 주어진다. ($1\leq s_r\leq N$; $1\leq s_c\leq M$)</p>
+
+<p>마지막 줄에는 대회장의 위치 $(e_r,e_c)$가 공백으로 구분되어 주어진다. ($1\leq e_r\leq N$; $1\leq e_c\leq M$)</p>
+
+<p>주어지는 숲의 입구와 대회장의 위치는 나무가 없어 지나갈 수 있는 칸임이 보장된다.</p>
+
+## 출력 
+
+ <p>첫째 줄에 최소한의 마나를 사용하여 대회장에 도착할 때 사용하는 마나를 출력한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+const int INF = 0x3f3f3f3f;
+
+int dx[] = {0, 0, 1, -1};
+int dy[] = {1, -1, 0, 0};
+int dist[1000][1000];
+bool visited[1000][1000], A[1000][1000];
+
+struct pos {
+    int x, y;
+};
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n, m; cin >> n >> m;
+    for(int i=0;i<n;i++) for(int j=0;j<m;j++) cin >> A[i][j];
+    int sr, sc, er, ec; cin >> sr >> sc >> er >> ec;
+
+    queue<pos> q;
+    q.push({sr-1, sc-1}); q.push({er-1, ec-1});
+    visited[sr-1][sc-1] = visited[er-1][ec-1] = true;
+    while(!q.empty()) {
+        pos cur = q.front(); q.pop();
+        for(int i=0;i<4;i++) {
+            pos next = {cur.x+dx[i], cur.y+dy[i]};
+            if(next.x<0 || next.x>=n || next.y<0 || next.y>=m || visited[next.x][next.y] || !A[next.x][next.y]) continue;
+            visited[next.x][next.y]=true;
+            q.push(next);
+        }
+    }
+
+    q.push({sr-1, sc-1});
+    fill(&dist[0][0], &dist[999][1000], INF);
+    dist[sr-1][sc-1]=0;
+    while(!q.empty()) {
+        pos cur = q.front(); q.pop();
+        for(int i=0;i<4;i++) {
+            pos next = {cur.x+dx[i], cur.y+dy[i]};
+            if(next.x<0 || next.x>=n || next.y<0 || next.y>=m || dist[next.x][next.y]<=dist[cur.x][cur.y]+!visited[next.x][next.y]) continue;
+            dist[next.x][next.y]=dist[cur.x][cur.y]+!visited[next.x][next.y];
+            q.push(next);
+        }
+    }
+    if(dist[er-1][ec-1]) cout << dist[er-1][ec-1]+1;
+    else cout << 0;
+}
+```
+
+# [Gold V] 네모난 순열 찾기 2
+
+[문제 링크](https://www.acmicpc.net/problem/34232) 
+
+## 문제 설명
+
+<p>$N^2$개의 수가 $N$행 $N$열의 표 $A$에 채워져 있다. 표의 위에서부터 $r$번째 행, 왼쪽에서부터 $c$번째 열에 위치한 칸에는 정수 $A_{r,c}$가 적혀 있으며, $r$행 $c$열을 편의상 $(r,c)$로 표현한다. <strong>이때, 표 $A$에 채워진 값은 모두 다르다.</strong></p>
+
+<p>표 $A$에서 직사각형 맨 왼쪽 위 칸이 $(r_1,c_1)$이고, 맨 오른쪽 아래 칸이 $(r_2,c_2)$가 되게 직사각형을 선택할 때, $1\leq r_1\leq r\leq r_2\leq N,1\leq c_1\leq c\leq c_2\leq N$ 을 만족하는 $A_{r,c}$는 직사각형 안에 있는 수이다.</p>
+
+<p>수 $x$개로 이루어진 배열이 $1$부터 $x$까지의 서로 다른 정수 $x$개로 이루어져 있다면, 순열이다. 예를 들어 $[2,3,1,5,4]$는 순열이지만, $[1,2,2]$와 $[1,3,4]$는 순열이 아니다.</p>
+
+<p>직사각형의 네 변이 표의 경계선과 겹치도록 직사각형을 선택할 때, 직사각형 안에 있는 수를 나열한 것이 순열이 되는 경우의 수는 얼마일까?</p>
+
+## 입력 
+
+ <p>첫째 줄에 표 $A$의 행과 열의 개수 $N$이 주어진다. ($1\leq N\leq 1\, 000$)</p>
+
+<p>이후 $N$개의 줄에 걸쳐 $i+1$번째 줄에 $A_{i,1},A_{i,2},\ldots ,A_{i,N}$이 공백으로 구분되어 주어진다. ($1\leq A_{i,j}\leq N^2$)</p>
+
+<p>표 $A$에 채워진 값은 서로 다르다.</p>
+
+## 출력 
+
+ <p>첫째 줄에 경우의 수를 출력한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+vector<pair<int, int>> idx(1'000'001);
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n; cin >> n;
+    for(int i=0;i<n;i++) {
+        for(int j=0;j<n;j++) {
+            int a; cin >> a;
+            idx[a] = {i, j};
+        }
+    }
+
+    int cnt=0;
+    int left=n, right=0, up=n, down=0;
+    for(int i=1;i<=n*n;i++) {
+        up = min(up, idx[i].first);
+        down = max(down, idx[i].first);
+        left = min(left, idx[i].second);
+        right = max(right, idx[i].second);
+        if((down-up+1)*(right-left+1)==i) cnt++;
+    }
+    cout << cnt;
+}
+```
+
+# [Bronze I] Encrypted SMS
+
+[문제 링크](https://www.acmicpc.net/problem/6260) 
+
+## 문제 설명
+
+<p>This year, ACM scientific committee members use emails to discuss about the problems and edit the selected ones. They know that email is not a secure way of communication, especially on such an important topic. So they transfer password-protected compressed file among themselves. In order to send the passwords, they use SMS. To increase the security level, the encrypted passwords are sent by SMS. To do this, a multi-tap SMS typing method is used.</p>
+
+<p>Multi-tap is currently the most common text input method for mobile phones. With this approach, the user presses each key one or more times to obtain the wanted characters. For example, the key 2 is pressed once to get character A, twice for B, and three times for C.</p>
+
+<p>The encryption algorithm that is used is quite simple: to encrypt the i th character of the password, the key used to obtain that character is tapped i more times. For if the 4th character of password is U, the key 8 is tapped 6 times, getting the character V. Note that to make the problem simple, we have assumed that the keypad does not generate digits.</p>
+
+<p>The scientific committee needs a program to decrypt the received passwords. They are too busy to write this program and have asked you to help! Write a program to get a correct encrypted text and print the original password.</p>
+
+<p style="text-align: center;"><img alt="" src="https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/problem/6260/1.png" style="height:215px; width:229px"></p>
+
+<p style="text-align: center;">The standard 12 key telephone keypad</p>
+
+## 입력 
+
+ <p>The input consists of multiple test cases. Each test case contains a non-empty string of length at most 100, consisting of small or capital English letters. The last line of the input contains a single #.</p>
+
+## 출력 
+
+ <p>For each test case, write the decrypted password in a separate line. Note that passwords are case-sensitive.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+char prv[] = {'C', 'A', 'B', 'F', 'D', 'E', 'I', 'G', 'H', 'L', 'J', 'K', 'O', 'M', 'N', 'S', 'P', 'Q', 'R', 'V', 'T', 'U', 'Z', 'W', 'X', 'Y'};
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    while(true) {
+        string s; cin >> s;
+        if(s[0]=='#') break;
+
+        for(int i=0;i<s.length();i++) {
+            int cnt=i+1;
+            while(cnt--) {
+                if(s[i]>='a') s[i] = prv[s[i]-'a']+32;
+                else s[i] = prv[s[i]-'A'];
+            }
+        }
+        cout << s << '\n';
+    }
+}
+```
+
+# [Silver III] Older Brother
+
+[문제 링크](https://www.acmicpc.net/problem/13469) 
+
+## 문제 설명
+
+<p>Your older brother is an amateur mathematician with lots of experience. However, his memory is very bad. He recently got interested in linear algebra over finite fields, but he does not remember exactly which finite fields exist. For you, this is an easy question: a finite field of order q exists if and only if q is a prime power, that is, q = p<sup>k</sup> holds for some prime number p and some integer k ≥ 1. Furthermore, in that case the field is unique (up to isomorphism).</p>
+
+<p>The conversation with your brother went something like this:</p>
+
+<p><img alt="" src="https://onlinejudgeimages.s3.amazonaws.com/problem/13469/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202016-11-01%20%EC%98%A4%ED%9B%84%202.22.39.png" style="height:276px; width:550px"></p>
+
+## 입력 
+
+ <p>The input consists of one integer q, satisfying 1 ≤ q ≤ 10<sup>9</sup>.</p>
+
+## 출력 
+
+ <p>Output “yes” if there exists a finite field of order q. Otherwise, output “no”.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int q; cin >> q;
+    if(q==1) {
+        cout << "no";
+        return 0;
+    }
+
+    for(int i=2;i*i<=q;i++) {
+        if(q%i==0) {
+            while(q%i==0) q/=i;
+            if(q==1) cout << "yes";
+            else cout << "no";
+            return 0;
+        }
+    }
+    cout << "yes";
+}
+```
+
+# [Silver IV] 판화
+
+[문제 링크](https://www.acmicpc.net/problem/1730) 
+
+## 문제 설명
+
+<p>W대학교 미술대학 조소과에서는 지루한 목판화 작업을 하는 학생들을 돕기 위해 판화 기계를 제작하였다.</p>
+
+<p>기계는 로봇 팔이 쥔 조각도를 상하좌우 네 방향으로 움직일 수 있는 구조로서, 조각도 아래에 목판을 놓으면 그 위에 선들을 자동으로 그어주는 기능을 가지고 있다.</p>
+
+<p>목판에는 N<sup>2</sup>개의 점들이 일정한 간격으로 N행 N열의 격자모양을 이루며 찍혀있다. 처음 로봇의 조각도를 올려놓는 위치는 항상 이 점들 중 맨 왼쪽 맨 위의 꼭짓점이다.</p>
+
+<p>로봇 팔을 움직이는 명령의 순서가 주어졌을 때, 목판 위에 패인 조각도의 혼적을 출력하는 프로그램을 작성하시오.</p>
+
+<p>판화 기계는 작동 도중 로봇 팔이 격자 바깥으로 나가도록 하는 움직임 명령을 만나면, 무시하고 그 다음 명령을 진행한다.</p>
+
+## 입력 
+
+ <p>첫째 줄에 목판의 크기 N (2 ≤ N ≤ 10)이 주어진다. 행 열의 점들이 찍혀 있다는 의미이다. 둘째 줄에 로봇팔의 움직임이 한 줄로 공백 없이 입력된다. 위쪽으로 이동은 'U', 아래쪽으로 이동은 'D', 왼쪽으로 이동은 'L', 오른쪽으로 이동은 'R'로 표시된다. 로봇팔의 움직임을 나타내는 이 문자열의 길이는 최대 250이다.</p>
+
+## 출력 
+
+ <p>로봇팔이 지나지 않은 점은 '.'으로, 로봇팔이 수직 방향으로만 지난 점은 '|'으로, 로봇팔이 수평 방향으로만 지난 점은 '-'으로, 수직과 수평 방향 모두로 지난 점은 '+'로 표기하도록 한다. 네 문자의 ASCII 코드는 각각 46, 124, 45, 43이다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+char board[10][10];
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n; string s; cin >> n >> s;
+    fill(&board[0][0], &board[9][10], '.');
+
+    int x=0, y=0;
+    for(char ch : s) {
+        if(ch=='D' && x!=n-1 || ch=='U' && x!=0) {
+            if(board[x][y]=='-') board[x][y]='+';
+            else if(board[x][y]=='.') board[x][y]='|';
+
+            if(ch=='D') x++;
+            else x--;
+
+            if(board[x][y]=='-') board[x][y]='+';
+            else if(board[x][y]=='.') board[x][y]='|';
+        } else if(ch=='R' && y!=n-1 || ch=='L' && y!=0) {
+            if(board[x][y]=='|') board[x][y]='+';
+            else if(board[x][y]=='.') board[x][y]='-';
+
+            if(ch=='R') y++;
+            else y--;
+
+            if(board[x][y]=='|') board[x][y]='+';
+            else if(board[x][y]=='.') board[x][y]='-';
+        }
+    }
+
+    for(int i=0;i<n;i++) {
+        for(int j=0;j<n;j++) cout << board[i][j];
+        cout << '\n';
+    }
+}
+```
+
+# [Silver IV] blobyum
+
+[문제 링크](https://www.acmicpc.net/problem/24499) 
+
+## 문제 설명
+
+<p>오늘도 블롭은 배고프다. 그래서 블롭은 요리사 연우를 찾아가 맛있는 것을 달라고 부탁했다.</p>
+
+<p>연우는 귀여운 블롭에게 이왕이면 맛있는 음식을 해 주고 싶었기에, 자신이 만드는 데에 가장 뛰어난 애플파이를 만들기로 하였다. 연우는 $N$개의 애플파이를 만들었으며, 이를 원 모양으로 책상에 배치해 놓았다.</p>
+
+<p>각 애플파이는 하나의 양의 정수로 표현되며, 이는 맛있는 정도를 의미한다. (수가 클수록 더 맛있는 애플파이이다.)</p>
+
+<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/140d5ae2-f4b2-48b6-9262-91be949de4f6/-/preview/" style="display: inline-block; max-width: 768px;"></p>
+
+<p>블롭은 $N$개의 애플파이 중 $K$개를 먹으려고 한다. 물론 블롭은 힘을 들이지 않고 먹고 싶기 때문에, 연속으로 배치되어 있는 $K$개의 애플파이를 먹으려 한다.</p>
+
+<p>블롭을 도와서 블롭이 먹을 애플파이의 맛의 합의 최댓값을 구해 주자!</p>
+
+## 입력 
+
+ <p>첫째 줄에 애플파이의 개수와 먹으려는 애플파이의 개수 $N$과 $K$가 공백으로 구분되어 주어진다.</p>
+
+<p>둘째 줄에 애플파이의 맛있는 정도를 나타내는 값인 $A_1, A_2, \cdots, A_N$이 공백으로 구분되어 주어진다.</p>
+
+## 출력 
+
+ <p>블롭이 먹을 애플파이의 맛의 합의 최댓값을 출력한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int preSum[200'001];
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n, k; cin >> n >> k;
+    for(int i=1;i<=n;i++) {
+        cin >> preSum[i];
+        preSum[i+n] = preSum[i];
+    }
+    for(int i=1;i<=2*n;i++) preSum[i] += preSum[i-1];
+
+    int maxSum=0;
+    for(int i=k;i<=2*n;i++) maxSum = max(maxSum, preSum[i]-preSum[i-k]);
+    cout << maxSum;
+}
+```
+
+# [Silver II] 약속
+
+[문제 링크](https://www.acmicpc.net/problem/1183) 
+
+## 문제 설명
+
+<p>마법사 N명이 머글 문화를 이해하기 위해 머글과 약속을 잡았다. 각 마법사는 한 명의 머글을 만날 예정이다. 하지만, 마법사는 약속 시간보다 빨리 또는 늦게 도착할 수 있기 때문에 고민에 빠졌다. 결국 기다리는 시간을 최소화 하기 위해 모든 약속 시간을 T씩 미루려고 한다. 기다리는 시간은 먼저 도착한 사람이 늦게 도착한 사람이 도착할 때까지 기다리는 시간을 의미한다.</p>
+
+<p>마법사의 약속 시간은 A<sub>1</sub>, A<sub>2</sub>, ..., A<sub>N</sub>이고, 도착 시간은 B<sub>1</sub>, B<sub>2</sub>, ..., B<sub>N</sub>이다. 약속 시간을 T만큼 미루면, 기다리는 시간의 합은 |A<sub>i</sub> + T - B<sub>i</sub>|의 합과 같다. 기다리는 시간의 합이 최소가 되는 서로 다른 정수 T의 개수를 구해보자.</p>
+
+## 입력 
+
+ <p>첫째 줄에 N이 주어진다. 다음 N개의 줄에 A<sub>i</sub>, B<sub>i</sub>가 주어진다.</p>
+
+## 출력 
+
+ <p>첫째 줄에 기다리는 시간의 합이 최소인 서로 다른 정수 T의 개수를 출력한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n; cin >> n;
+    vector<int> diffs;
+    for(int i=0;i<n;i++) {
+        int a, b; cin >> a >> b;
+        diffs.push_back(a-b);
+    }
+    sort(diffs.begin(), diffs.end());
+    cout << abs(diffs[n/2] - diffs[(n-1)/2])+1;
+}
+```
+
+# [Silver II] 삼각형으로 자르기
+
+[문제 링크](https://www.acmicpc.net/problem/1198) 
+
+## 문제 설명
+
+<p>볼록 다각형이 있고, 여기서 3개의 연속된 점을 선택해서 삼각형을 만든다. 그 다음, 만든 삼각형을 다각형에서 제외한다. 원래 다각형이 N개의 점이 있었다면, 이제 N-1개의 점으로 구성된 볼록 다각형이 된다. 위의 과정은 남은 다각형이 삼각형이 될 때까지 반복한다.</p>
+
+<p>볼록 다각형의 점이 시계 방향순으로 주어진다. 마지막에 남은 삼각형은 여러 가지가 있을 수 있다. 이때, 가능한 넓이의 최댓값을 구하는 프로그램을 작성하시오.</p>
+
+## 입력 
+
+ <p>첫째 줄에 볼록 다각형 점의 수 N (3 ≤ N ≤ 35)이 주어진다. 둘째 줄부터 N개의 줄에는 볼록 다각형을 이루고 있는 점이 시계 방향 순서로 주어진다. 좌표는 10,000보다 작거나 같은 자연수이다.</p>
+
+## 출력 
+
+ <p>첫째 줄에 문제의 정답을 출력한다. 절대/상대 오차는 10<sup>-9</sup>까지 허용한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+struct pos {
+    int x, y;
+};
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n; cin >> n;
+    vector<pos> v(n);
+    for(int i=0;i<n;i++) cin >> v[i].x >> v[i].y;
+
+    double maxArea=0;
+    for(int i=0;i<n;i++) {
+        for(int j=i+1;j<n;j++) {
+            for(int k=j+1;k<n;k++) {
+                maxArea = max(maxArea, abs(v[i].x*v[j].y+v[j].x*v[k].y+v[k].x*v[i].y-(v[i].x*v[k].y+v[j].x*v[i].y+v[k].x*v[j].y))/2.0);
+            }
+        }
+    }
+    cout << setprecision(9) << fixed << maxArea;
+}
+```
+
+# [Silver I] 기타콘서트
+
+[문제 링크](https://www.acmicpc.net/problem/1497) 
+
+## 문제 설명
+
+<p>강토는 Day Of Mourning의 기타리스트로, 다가오는 공연을 준비하고 있다.</p>
+
+<p>어느 날 강토의 집에 도둑이 들어서 기타를 모두 도둑맞고 말았다. 기타를 사야 한다.</p>
+
+<p>강토는 공연 때 연주할 노래의 목록을 뽑아 놓았다. 하지만, 하나의 기타로 모든 곡을 연주할 수는 없다. 어떤 기타는 어떤 곡을 연주할 때, 이상한 소리가 나기 때문이다. 항상 완벽을 추구하는 강토는 이런 일을 용납하지 않는다.</p>
+
+<p>최대한 많은 곡을 제대로 연주하려고 할 때, 필요한 기타의 최소 개수를 구하는 프로그램을 작성하시오.</p>
+
+<p>예를 들어, GIBSON으로 1, 2, 3번 곡을 제대로 연주할 수 있고, FENDER로 1, 2, 5번 곡을 제대로 연주할 수 있고, EPIPHONE으로 4, 5번 곡을 제대로 연주할 수 있고, ESP로 1번곡을 제대로 연주할 수 있다면, 세준이는 EPIPHONE과 GIBSON을 사면 최소의 개수로 모든 곡을 연주할 수 있다. </p>
+
+## 입력 
+
+ <p>첫째 줄에 기타의 개수 N과 곡의 개수 M이 주어진다. N은 10보다 작거나 같은 자연수이고, M은 50보다 작거나 같은 자연수이다. 둘째 줄부터 N개의 줄에 기타의 이름과 기타가 연주할 수 있는 곡의 정보가 1번 곡부터 차례대로 주어진다. Y는 연주할 수 있는 것이고, N은 없는 것이다. 기타의 이름은 알파벳 대문자로만 이루어져 있고, 길이는 2 이상, 50 이하이다. 두 기타의 이름이 같은 경우는 없다.</p>
+
+## 출력 
+
+ <p>첫째 줄에 필요한 기타의 개수를 출력한다. 만약 연주할 수 있는 곡이 없으면 -1을 출력한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int n, m;
+int cnt[50];
+int maxSongCnt, maxDepth=-1;
+bool chk[10][50], visited[10];
+
+void back(int depth=0) {
+    int cur=0;
+    for(int i=0;i<m;i++) if(cnt[i]) cur++;
+
+    if(maxSongCnt<cur) {
+        maxSongCnt = cur;
+        maxDepth = depth;
+    } else if(maxSongCnt==cur) {
+        maxDepth = min(maxDepth, depth);
+    }
+
+    for(int i=0;i<n;i++) {
+        if(!visited[i]) {
+            visited[i]=true;
+            for(int j=0;j<m;j++) cnt[j] += chk[i][j];
+            back(depth+1);
+            for(int j=0;j<m;j++) cnt[j] -= chk[i][j];
+            visited[i]=false;
+        }
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    cin >> n >> m;
+    for(int i=0;i<n;i++) {
+        string s; cin >> s >> s;
+        for(int j=0;j<m;j++) {
+            chk[i][j] = s[j]=='Y';
+        }
+    }
+    back();
+    cout << maxDepth;
+}
+```
+
+# [Silver V] 야구 시즌
+
+[문제 링크](https://www.acmicpc.net/problem/21760) 
+
+## 문제 설명
+
+<p>KOI 야구 리그에는 $N$개의 지역리그가 존재하고 각 지역리그에는 $M$개의 팀이 존재해서, 리그 전체로는 $N \times M$개의 팀으로 운영되고 있다.</p>
+
+<p>한 시즌에 각 팀은 같은 지역리그 팀뿐만 아니라 다른 지역리그 팀과도 경기를 해야 한다. 같은 지역리그 팀과의 팀당 경기 수는 $A$로 같은 지역리그 팀들에 대해서 모두 동일하다. 즉, 한 팀 $X$는 같은 지역리그에 있는 모든 팀 $Y$ ($\ne X$)와 각각 $A$번의 경기를 한다. 또한 다른 지역리그 팀과의 팀당 경기 수는 $B$로 다른 지역리그 팀들에 대해서 모두 동일하다. 즉, 한 팀 $X$는 다른 지역리그에 있는 모든 팀 $Z$($\ne X$)와 각각 $B$번의 경기를 한다. 단, $A$와 $B$는 $A = k \times B$ ($k$는 $1$ 이상의 정수)를 만족해야 한다.</p>
+
+<p>세계적 판데믹의 영향으로 올해 KOI 야구 리그는 시즌을 단축하여, 리그의 전체 경기 수가 $D$개 이하 이면서 $D$에 가장 가깝게 되도록 정하기로 했다. 따라서 같은 지역리그 팀과의 팀당 경기 수 $A$와 다른 지역리그 팀과의 팀당 경기 수 $B$를 새롭게 결정해야 한다. 물론, $A = k \times B$를 만족해야 하고, $k$는 변함없이 유지되어야 한다. 또한 각 팀은 다른 팀과 적어도 한 번이상은 경기를 해야 한다. 다시 말해서, $A \ge 1$, $B \ge 1$을 만족해야 한다.</p>
+
+<p>예를 들어, $N = 2$, $M = 3$, $k = 3$일 때, 경기 수 제한 $D = 60$이면, $A = 6$, $B = 2$일 때, 다른 지역리그 팀들과의 총 경기 수는 $18$이고, 같은 지역리그 팀들과의 총 경기 수는 $36$이다. 따라서 리그 전체 경기 수는 $54$로 $D$에 가장 가까운 새로운 경기 수이다.</p>
+
+<p>지역리그의 개수 $N$, 각 지역리그에 속하는 팀 수 $M$, 그리고 위에서 $A = k \times B$를 만족하는 정수 $k$, 새로운 경기 수 제한 $D$가 주어질 때, $D$ <strong>이하</strong>이면서 $D$에 <strong>가장 가까운</strong> 리그 전체 경기 수를 계산해서 출력하는 프로그램을 작성하시오.</p>
+
+## 입력 
+
+ <p>첫 번째 줄에 테스트 케이스의 개수 $T$가 주어진다.</p>
+
+<p>다음 $T$개의 줄에 각 테스트 케이스의 정보가 한 줄에 하나씩 주어진다.</p>
+
+<p>각 테스트 케이스는 하나의 줄에 네 개의 정수 $N$, $M$, $k$, $D$가 공백 하나를 사이로 두고 주어진다.</p>
+
+## 출력 
+
+ <p>$T$개의 각 줄에 각 테스트 케이스에 대해 리그 <strong>전체 경기 수</strong>를 출력한다.</p>
+
+<p>만약 조건을 만족하는 경기 수가 존재하지 않으면 $-1$을 출력한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t;
+    while(t--) {
+        int n, m, k, d; cin >> n >> m >> k >> d;
+        int cur = k*n*(m*(m-1)/2) + m*m*(n*(n-1)/2);
+        if(cur>d) cout << "-1\n";
+        else cout << d/cur*cur << '\n';
+    }
+}
+```
+
+# [Gold III] Colored Squares
+
+[문제 링크](https://www.acmicpc.net/problem/20714) 
+
+## 문제 설명
+
+<p>Graphic design is Aditya's new passion. He has launched his new company, Turmeric, and his first client comes to him to design a new logo. The old logo consists of $n$ colored squares in a row. The $i$-th square is painted in a color represented by a number $s_i$ such that $1 \leq s_i \leq c$, where $c$ is the total number of colors in the logo. Now, the client is a very picky person. He will not allow Aditya to change any of the square's colors but he will give Aditya the artistic freedom to delete up to $k$ squares in the logo. Aditya thinks that the aesthetic score of a logo is equal to the maximum number of consecutive squares with the same color. Help Aditya figure out how to remove <strong>at most</strong> $k$ squares such that the aesthetic score of the new logo is maximized. Aditya may choose to not remove any squares.</p>
+
+## 입력 
+
+ <p>The first line of input is $3$ integers separated by spaces $n$, $c$, and $k$ such that $1 \leq n \leq 2 \cdot 10^5$ , $1 \leq c \leq 10^5$, and $1 \leq k < n$ </p>
+
+<p>The next line is $n$ integers $s_1, s_2 \ldots s_n$ separated by spaces representing the color of each square in the pattern, such that $1 \leq s_i \leq c$.</p>
+
+## 출력 
+
+ <p>Output a single integer, the maximum possible aesthetic score of the new logo.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int s[200'000], cnt[100'001];
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n, c, k; cin >> n >> c >> k;
+    for(int i=0;i<n;i++) cin >> s[i];
+
+    int maxLen=0;
+    int left=0, right=0;
+    while(left<n || right<n) {
+        while(right<n && (s[left]==s[right] || right-left-cnt[s[left]]<k)) {
+            cnt[s[right++]]++;
+            maxLen = max(maxLen, cnt[s[left]]);
+        }
+        cnt[s[left++]]--;
+        if(right-left-cnt[s[left]]<=k) maxLen = max(maxLen, cnt[s[left]]);
+    }
+    cout << maxLen;
+}
+```
+
+# [Gold II] Scored Nim
+
+[문제 링크](https://www.acmicpc.net/problem/18540) 
+
+## 문제 설명
+
+<p>Alice and Bob want to play Nim. Well, some kind of it.</p>
+
+<p>Initially, they have n heaps of stones, i-th heap containing a<sub>i</sub> stones. Players take alternating turns, Alice moves first. On their turn, a player chooses any heap with at least two stones and splits it into two new heaps with at least one stone in each. After that, the player colors all stones in one of the new heaps white and all stones in the other one black. The game lasts until every heap contains only one stone.</p>
+
+<p>After the game, Alice’s score is the number of white stones on the board, and Bob’s score is the number of black stones. Both players want to maximize their score and play optimally. What will be Alice’s score?</p>
+
+## 입력 
+
+ <p>The first line of input contains a single integer n (1 ≤ n ≤ 128).</p>
+
+<p>The second line of input contains n integers a<sub>1</sub>, a<sub>2</sub>, . . . , a<sub>n</sub> (2 ≤ a<sub>i</sub> ≤ 128).</p>
+
+<p>Note that the initial colors of the stones are irrelevant.</p>
+
+## 출력 
+
+ <p>Output a single integer: Alice’s score if both players play optimally.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n; cin >> n;
+    int sum=0;
+    while(n--) {
+        int a; cin >> a;
+        sum += a;
+    }
+    cout << (sum+1>>1);
+}
+```
+
+# [Gold I] Beast Bullies
+
+[문제 링크](https://www.acmicpc.net/problem/27384) 
+
+## 문제 설명
+
+<p>There are some animals with distinct strength levels getting water from a watering hole. The more animals that are at the watering hole the less water each animal will get. For this reason some of the animals will try to force the others to leave.</p>
+
+<p>Periodically the weakest animal in the group may be attacked by some of the stronger animals. Other animals may come to the aid of the weakest animal. The weakest animal will leave if the sum of the strength levels of the attackers is strictly greater than the sum of the strength levels of the defenders. The other defenders, if any, will remain. This may repeat any number of times.</p>
+
+<p>As an up-and-coming zoologist, you are interested in determining if animals are logical thinkers. You have a lot of data, so you will write a program to help check if, in each situation, the animals behaved optimally. Each animal wants to eliminate as many other animals as possible without being eliminated itself.</p>
+
+<p>Given the strength level of each animal and assuming each animal always makes the best decision for their best interests, determine how many animals are guaranteed to remain after all aggression has been resolved.</p>
+
+## 입력 
+
+ <p>The first line of input contains a single integer $n$ ($1 \le n \le 5 \times 10^5$), which is the number of animals.</p>
+
+<p>Each of the next $n$ lines contains a single integer $s$ ($1 \le s \le 10^9$). These are the strengths of the animals. No two strengths will be the same.</p>
+
+## 출력 
+
+ <p>Output a single integer, which is the number of animals guaranteed to remain.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n; cin >> n;
+    vector<int> v(n);
+    for(int i=0;i<n;i++) cin >> v[i];
+    sort(v.begin(), v.end());
+    
+    ll attackIdx=n-1, attacker=v[n-1], defender=0;
+    for(int i=n-2;i>=0;i--) {
+        defender += v[i];
+        if(defender>=attacker) {
+            attacker += defender;
+            defender=0;
+            attackIdx=i;
+        }
+    }
+    cout << n-attackIdx;
+}
+```
+
+# [Platinum III] 트리의 가중치
+
+[문제 링크](https://www.acmicpc.net/problem/1289) 
+
+## 문제 설명
+
+<p>트리는 N개의 정점과 N-1개의 간선으로 구성된 그래프이다. 트리의 성질 중 하나는 어느 두 정점 간에도 유일하게 하나의 경로가 존재한다는 것이다.</p>
+
+<p>트리의 모든 간선에 음이 아닌 정수인 가중치가 배정되었다. ‘경로의 가중치’란 경로에 해당하는 간선의 곱으로 정의된다. 또한 ‘트리의 가중치’는 트리 상에 가능한 모든 경로에 대해 ‘경로의 가중치’의 합을 의미한다. 문제는 트리가 주어졌을 때 ‘트리의 가중치’를 구하는 것이다.</p>
+
+## 입력 
+
+ <p>첫째 줄에 트리의 정점의 개수 N(1 ≤ N ≤ 100,000)이 주어진다. 다음 N-1개의 줄에 대해 각 줄에는 세 개의 정수 A, B, W(1 ≤ A, B ≤ N, 0 ≤ W ≤ 1,000)가 입력되는데 이는 A점과 B점이 연결되어 있고 이 간선의 가중치는 W라는 것을 의미한다.</p>
+
+## 출력 
+
+ <p>첫째 줄에 트리의 가중치를 1,000,000,007로 나눈 나머지를 출력한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+const int MAX = 100'001;
+const ll MOD = 1e9+7;
+
+ll res;
+bool visited[MAX];
+vector<vector<pair<int, int>>> conn(MAX);
+
+ll dfs(int cur=1, ll edgeCost=0) {
+    visited[cur]=true;
+
+    vector<ll> rets;
+    for(auto next : conn[cur]) {
+        if(!visited[next.first]) {
+            rets.push_back(dfs(next.first, next.second));
+        }
+    }
+    int n = rets.size();
+    if(!n) return edgeCost;
+
+    vector<ll> preSum(n+1);
+    for(int i=0;i<n;i++) preSum[i+1] = (preSum[i] + rets[i]) % MOD;
+
+    for(int i=1;i<n;i++) res = (res+(preSum[n]-preSum[i]+MOD)*rets[i-1]) % MOD;
+    res = (res+preSum[n]) % MOD;
+    return (preSum[n]+1)*edgeCost % MOD;
+}
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n; cin >> n;
+    for(int i=0;i<n-1;i++) {
+        int a, b, w; cin >> a >> b >> w;
+        conn[a].push_back({b, w});
+        conn[b].push_back({a, w});
+    }
+    dfs();
+    cout << res;
+}
+```
