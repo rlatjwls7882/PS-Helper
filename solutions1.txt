@@ -2219,7 +2219,7 @@ int main() {
         for(int i=0;i<k;i++) cin >> b[i];
 
         vector<int> res(k);
-        int len=n/10+1;
+        int len=n/100+1;
         for(int idx=0;idx<n;idx+=len) {
             trie *root = new trie;
             for(int i=idx;i<min(idx+len, n);i++) {
@@ -2361,5 +2361,1007 @@ int main() {
         int i, j, k; cin >> i >> j >> k;
         cout << getCnt(i-1, j-1, k) << '\n';
     }
+}
+```
+
+# [Platinum V] 거의 최단 경로
+
+[문제 링크](https://www.acmicpc.net/problem/5719) 
+
+## 문제 설명
+
+<p>요즘 많은 자동차에서는 GPS 네비게이션 장비가 설치되어 있다. 네비게이션은 사용자가 입력한 출발점과 도착점 사이의 최단 경로를 검색해 준다. 하지만, 교통 상황을 고려하지 않고 최단 경로를 검색하는 경우에는 극심한 교통 정체를 경험할 수 있다.</p>
+
+<p>상근이는 오직 자기 자신만 사용 가능한 네비게이션을 만들고 있다. 이 네비게이션은 절대로 최단 경로를 찾아주지 않는다. 항상 거의 최단 경로를 찾아준다.</p>
+
+<p>거의 최단 경로란 최단 경로에 포함되지 않는 도로로만 이루어진 경로 중 가장 짧은 것을 말한다. </p>
+
+<p>예를 들어, 도로 지도가 아래와 같을 때를 생각해보자. 원은 장소를 의미하고, 선은 단방향 도로를 나타낸다. 시작점은 S, 도착점은 D로 표시되어 있다. 굵은 선은 최단 경로를 나타낸다. (아래 그림에 최단 경로는 두 개가 있다)거의 최단 경로는 점선으로 표시된 경로이다. 이 경로는 최단 경로에 포함되지 않은 도로로 이루어진 경로 중 가장 짧은 경로이다. 거의 최단 경로는 여러 개 존재할 수도 있다. 예를 들어, 아래 그림의 길이가 3인 도로의 길이가 1이라면, 거의 최단 경로는 두 개가 된다. 또, 거의 최단 경로가 없는 경우도 있다.</p>
+
+<p><img alt="" src="https://www.acmicpc.net/upload/images/almost.png" style="height:174px; width:265px"></p>
+
+## 입력 
+
+ <p>입력은 여러 개의 테스트 케이스로 이루어져 있다. 각 테스트 케이스의 첫째 줄에는 장소의 수 N (2 ≤ N ≤ 500)과 도로의 수 M (1 ≤ M ≤ 10<sup>4</sup>)가 주어진다. 장소는 0부터 N-1번까지 번호가 매겨져 있다. 둘째 줄에는 시작점 S와 도착점 D가 주어진다. (S ≠ D; 0 ≤ S, D < N) 다음 M개 줄에는 도로의 정보 U, V, P가 주어진다. (U ≠ V ; 0 ≤ U, V < N; 1 ≤ P ≤ 10<sup>3</sup>) 이 뜻은 U에서 V로 가는 도로의 길이가 P라는 뜻이다. U에서 V로 가는 도로는 최대 한 개이다. 또, U에서 V로 가는 도로와 V에서 U로 가는 도로는 다른 도로이다. </p>
+
+<p>입력의 마지막 줄에는 0이 두 개 주어진다.</p>
+
+## 출력 
+
+ <p>각 테스트 케이스에 대해서, 거의 최단 경로의 길이를 출력한다. 만약, 거의 최단 경로가 없는 경우에는 -1을 출력한다.</p>
+
+## 풀이
+
+```
+#include<bits/stdc++.h>
+using namespace std;
+
+const int INF = 0x3f3f3f3f;
+const int MAX = 500;
+
+int n, m, s, d;
+
+struct edge {
+    int u, v, c;
+    bool operator==(const edge e) const {
+        return u==e.u && v==e.v;
+    }
+};
+
+vector<vector<edge>> conn, prv;
+
+struct pos {
+    int idx, val;
+    bool operator<(const pos p) const {
+        return val > p.val;
+    }
+};
+
+int dijkstra() {
+    vector<int> minCost(n, INF);
+    prv = vector<vector<edge>>(n);
+    priority_queue<pos> pq; pq.push({s, 0});
+    minCost[s]=0;
+    while(!pq.empty()) {
+        pos cur = pq.top(); pq.pop();
+        if(minCost[cur.idx] < cur.val || cur.idx==d) continue;
+
+        for(edge &next:conn[cur.idx]) {
+            int nextCost = cur.val+next.c;
+            if(minCost[next.v]>nextCost) {
+                minCost[next.v] = nextCost;
+                prv[next.v] = {next};
+                pq.push({next.v, nextCost});
+            } else if(minCost[next.v]==nextCost) {
+                prv[next.v].push_back(next);
+            }
+        }
+    }
+
+    vector<bool> visited(n);
+    queue<int> q; q.push(d);
+    visited[d]=true;
+    while(!q.empty()) {
+        int cur = q.front(); q.pop();
+        if(cur==s) continue;
+        prv[cur].erase(unique(prv[cur].begin(), prv[cur].end()), prv[cur].end());
+        for(edge next:prv[cur]) {
+            conn[next.u].erase(find(conn[next.u].begin(), conn[next.u].end(), next));
+            if(!visited[next.u]) {
+                visited[next.u]=true;
+                q.push(next.u);
+            }
+        }
+    }
+    return (minCost[d] == INF ? -1 : minCost[d]);
+}
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    while(true) {
+        cin >> n >> m >> s >> d;
+        if(!n) break;
+        conn = vector<vector<edge>>(n);
+        while(m--) {
+            int u, v, c; cin >> u >> v >> c;
+            conn[u].push_back({u, v, c});
+        }
+        dijkstra();
+        cout << dijkstra() << '\n';
+    }
+}
+```
+
+# A - Stage Clear
+[문제 링크](https://atcoder.jp/contests/abc422/tasks/abc422_a)
+
+## Problem Statement
+
+Takahashi is playing a game.
+This game has eight worlds, and each world has eight stages.
+The stages have an order, and the first stage is the \$1\$st stage in the \$1\$st world.
+The next stage after the \$j\$-th stage \$(1 \le j \le 8)\$ in the \$i\$-th world \$(1 \le i \le 8)\$ is as follows:
+
+* When \$j < 8\$, the next stage is the \$(j+1)\$-th stage in the \$i\$-th world.
+* When \$i < 8,; j = 8\$, the next stage is the \$1\$st stage in the \$(i+1)\$-th world.
+* When \$i = 8,; j = 8\$, there is no next stage. This stage is the last stage.
+
+The name of the \$j\$-th stage \$(1 \le j \le 8)\$ in the \$i\$-th world \$(1 \le i \le 8)\$ is \$i\$-\$j\$.
+For example, the name of the first stage is `1-1`, and the name of the last stage is `8-8`.
+
+Given the stage name \$S\$ of the stage Takahashi is currently playing, output the stage name of the next stage.
+
+## Constraints
+
+* \$S\$ is the stage name of one of the stages.
+* \$S\$ is not `8-8`.
+
+## Input
+
+The input is given from Standard Input in the following format:
+
+$S$
+
+## Output
+
+Output the stage name of the next stage.
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int a, b; char ch; cin >> a >> ch >> b;
+    if(++b==9) a++, b=1;
+    cout << a << '-' << b;
+}
+```
+
+# B - Looped Rope
+[문제 링크](https://atcoder.jp/contests/abc422/tasks/abc422_b)
+
+## Problem Statement
+
+There is a grid with \$H\$ rows and \$W\$ columns.
+Let \$(i, j)\$ denote the cell at the \$i\$-th row \$(1 \le i \le H)\$ from the top and the \$j\$-th column \$(1 \le j \le W)\$ from the left.
+
+Each cell is painted with one color, white or black.
+The color painted on the cells is represented by \$H\$ strings \$S\_1, S\_2, \ldots, S\_H\$.
+When the \$j\$-th character \$(1 \le j \le W)\$ of \$S\_i\$ \$(1 \le i \le H)\$ is `.` , cell \$(i, j)\$ is painted white;
+when the \$j\$-th character \$(1 \le j \le W)\$ of \$S\_i\$ \$(1 \le i \le H)\$ is `#` , cell \$(i, j)\$ is painted black.
+
+Determine whether the grid satisfies the following condition:
+
+* For every black cell, the number of horizontally or vertically adjacent cells that are painted black is \$2\$ or \$4\$.
+
+Here, cells \$(i, j)\$ \$(1 \le i \le H, 1 \le j \le W)\$ and \$(k, l)\$ \$(1 \le k \le H, 1 \le l \le W)\$ are horizontally or vertically adjacent if and only if \$|i-k| + |j-l| = 1\$.
+
+## Constraints
+
+* \$1 \le H \le 20\$
+* \$1 \le W \le 20\$
+* \$H\$ and \$W\$ are integers.
+* \$S\_i\$ is a string of length \$W\$ consisting of `.` and `#` \$(1 \le i \le H)\$.
+
+## Input
+
+The input is given from Standard Input in the following format:
+
+$H$ $W$  
+$S_1$  
+$S_2$  
+$\vdots$  
+$S_H$
+
+## Output
+
+Output `Yes` if the given grid satisfies the condition, and `No` if it does not satisfy the condition.
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int dx[] = {0, 0, 1, -1};
+int dy[] = {1, -1, 0, 0};
+
+string s[20];
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int h, w; cin >> h >> w;
+    for(int i=0;i<h;i++) cin >> s[i];
+
+    for(int i=0;i<h;i++) {
+        for(int j=0;j<w;j++) {
+            if(s[i][j]=='#') {
+                int cnt=0;
+                for(int k=0;k<4;k++) {
+                    int nx = i+dx[k];
+                    int ny = j+dy[k];
+                    if(nx<0 || nx>=h || ny<0 || ny>=w || s[nx][ny]=='.') continue;
+                    cnt++;
+                }
+                if(cnt!=2 && cnt!=4) {
+                    cout << "No";
+                    return 0;
+                }
+            }
+        }
+    }
+    cout << "Yes";
+}
+```
+
+# C - AtCoder AAC Contest
+[문제 링크](https://atcoder.jp/contests/abc422/tasks/abc422_c)
+
+## Problem Statement
+
+Takahashi has some letters. Each letter he has is `A`, `B`, or `C`.
+Initially, he has \$n\_A\$ letters `A`, \$n\_B\$ letters `B`, and \$n\_C\$ letters `C`.
+
+He can hold one contest by using one letter `A`, one letter `C`, and **additionally any one letter**, for a total of three letters.
+Specifically, he can hold `AAC` (two `A` and one `C`), `ABC` (one of each), or `ACC` (one `A` and two `C`).
+
+He wants to hold as many contests as possible using the letters he currently has.
+Find the **maximum** number of contests he can hold.
+
+\$T\$ test cases are given; report the answer for each of them.
+
+## Constraints
+
+* \$1 \le T \le 2 \times 10^{5}\$
+* For each test case:
+  * \$0 \le n\_A \le 10^{9}\$
+  * \$0 \le n\_B \le 10^{9}\$
+  * \$0 \le n\_C \le 10^{9}\$
+* All input values are integers.
+
+## Input
+
+The input is given from Standard Input in the following format:
+
+$T$  
+$testcase_1$  
+$testcase_2$  
+$\vdots$  
+$testcase_T$
+
+Each `testcase_i` (\$1 \le i \le T\$) is given as:
+
+$n_A$ $n_B$ $n_C$
+
+## Output
+
+Output over \$T\$ lines.
+On the \$i\$-th line (\$1 \le i \le T\$), output the answer to the \$i\$-th test case.
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t;
+    while(t--) {
+        ll a, b, c; cin >> a >> b >> c;
+        ll cnt = min({a, b, c});
+        a -= cnt;
+        b -= cnt;
+        c -= cnt;
+        cnt += min({a, c, (a+b+c)/3});
+        cout << cnt << '\n';
+    }
+}
+```
+
+# D - Least Unbalanced
+[문제 링크](https://atcoder.jp/contests/abc422/tasks/abc422_d)
+
+## Problem Statement
+
+Let $N$ be a positive integer. Define the **imbalance** of a sequence $A=(A_1, A_2, \dots, A_{2^N})$ of non-negative integers of length $2^N$ as the non-negative integer value obtained by the following operation:
+
+* Initially, set $X=0$.
+* Perform the following series of operations $N$ times:
+  * Update $X$ to $\max\!\bigl(X,\ \max(A)-\min(A)\bigr)$, where $\max(A)$ and $\min(A)$ denote the maximum and minimum values of sequence $A$, respectively.
+  * Form a new sequence of half the length by pairing elements from the beginning two by two and arranging their sums. That is, set
+    $A \gets (A_1 + A_2,\ A_3 + A_4,\ \dots,\ A_{\lvert A \rvert - 1} + A_{\lvert A \rvert})$.
+* The final value of $X$ is the imbalance.
+
+For example, when $N=2,\ A=(6, 8, 3, 5)$, the imbalance is $6$ through the following steps:
+
+* Initially, $X=0$.
+* The first series of operations is as follows:
+  * Update $X$ to $\max\!\bigl(X,\ \max(A)-\min(A)\bigr)=\max(0,\ 8-3)=5$.
+  * Set $A$ to $(6+8,\ 3+5)=(14,\ 8)$.
+* The second series of operations is as follows:
+  * Update $X$ to $\max\!\bigl(X,\ \max(A)-\min(A)\bigr)=\max(5,\ 14-8)=6$.
+  * Set $A$ to $(14+8)=(22)$.
+* Finally, $X=6$.
+
+You are given a non-negative integer $K$. Among all sequences of non-negative integers of length $2^N$ with sum $K$, construct a sequence that minimizes the imbalance.
+
+## Constraints
+
+* $1 \le N \le 20$
+* $0 \le K \le 10^{9}$
+* $N$ and $K$ are integers.
+
+## Input
+
+The input is given from Standard Input in the following format:
+
+$N$ $K$
+
+## Output
+
+Let $B=(B_1, B_2, \dots, B_{2^N})$ be a sequence with minimum imbalance. Let $U$ be the imbalance of $B$. Output a solution in the following format:
+
+$U$  
+$B_1$ $B_2$ $\dots$ $B_{2^N}$
+
+If there are multiple solutions, any of them will be considered correct.
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    ll n, k; cin >> n >> k;
+
+    vector<ll> A = {k};
+    while(n--) {
+        vector<ll> nextA;
+        for(ll e : A) {
+            nextA.push_back(e/2);
+            nextA.push_back((e+1)/2);
+        }
+        A = nextA;
+    }
+
+    cout << *max_element(A.begin(), A.end()) - *min_element(A.begin(), A.end()) << '\n';
+    for(ll e : A) cout << e << ' ';
+}
+```
+
+# F - Eat and Ride
+[문제 링크](https://atcoder.jp/contests/abc422/tasks/abc422_f)
+
+## Problem Statement
+
+There is a connected undirected graph with $N$ vertices and $M$ edges.  
+The vertices are numbered $1,2,\ldots,N$, and the $i$-th edge $(1\le i\le M)$ connects vertices $u_i$ and $v_i$.
+
+For $i = 1,2,\ldots,N$, solve the following problem:
+
+- Initially, Takahashi's weight is $0$.
+- He travels by car to visit vertex $1$ and moves toward vertex $i$.
+- When he visits vertex $v (1\le v\le N)$, his weight increases by $W_v$.
+- The car he is riding can move along the edges.  
+  When he passes through an edge, letting $X$ be his weight at that time, the car consumes $X$ fuel.
+
+Find the minimum amount of fuel consumed for him to reach vertex $i$.
+
+## Constraints
+
+- $1 \le N \le 5000$
+- $1 \le M \le 5000$
+- $1 \le W_i \le 10^{9}\ \ (1\le i\le N)$
+- $1 \le u_i \le v_i \le N\ \ (1\le i\le M)$
+- The given graph is connected.
+- All input values are integers.
+
+## Input
+
+The input is given from Standard Input in the following format:
+
+$N$ $M$  
+$W\_1$ $W\_2$ $\ldots$ $W\_N$  
+$u\_1$ $v\_1$  
+$u\_2$ $v\_2$  
+$\vdots$  
+$u\_M$ $v\_M$
+
+## Output
+
+Output over $N$ lines.  
+On the $i$-th line $(1 \le i \le N)$, output the amount of fuel needed for Takahashi to reach vertex $i$.
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+const int MAX = 5'000;
+
+ll w[MAX], minFuel[MAX];
+vector<vector<int>> conn(MAX);
+
+struct pos {
+    ll idx, cost, fuel;
+    bool operator<(const pos p) const {
+        if(cost!=p.cost) return cost > p.cost;
+        return fuel > p.fuel;
+    }
+};
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n, m; cin >> n >> m;
+    for(int i=0;i<n;i++) cin >> w[i];
+    while(m--) {
+        int u, v; cin >> u >> v;
+        conn[u-1].push_back(v-1);
+        conn[v-1].push_back(u-1);
+    }
+
+    fill(minFuel, minFuel+n, LONG_LONG_MAX);
+    priority_queue<pos> pq; pq.push({0, w[0], 0});
+    minFuel[0]=0;
+    while(!pq.empty()) {
+        pos cur = pq.top(); pq.pop();
+        for(int next:conn[cur.idx]) {
+            pos n = {next, cur.cost+w[next], cur.cost+cur.fuel};
+            if(minFuel[next]>n.fuel) {
+                minFuel[next] = n.fuel;
+                pq.push(n);
+            }
+        }
+    }
+    for(int i=0;i<n;i++) cout << minFuel[i] << '\n';
+}
+```
+
+# [Platinum V] 임계경로
+
+[문제 링크](https://www.acmicpc.net/problem/1948) 
+
+## 문제 설명
+
+<p>월드 나라는 모든 도로가 일방통행인 도로이고, 싸이클이 없다. 그런데 어떤 무수히 많은 사람들이 월드 나라의 지도를 그리기 위해서, 어떤 시작 도시로부터 도착 도시까지 출발을 하여 가능한 모든 경로를 탐색한다고 한다.</p>
+
+<p>이 지도를 그리는 사람들은 사이가 너무 좋아서 지도를 그리는 일을 다 마치고 도착 도시에서 모두 다 만나기로 하였다. 그렇다고 하였을 때 이들이 만나는 시간은 출발 도시로부터 출발한 후 최소 몇 시간 후에 만날 수 있는가? 즉, 마지막에 도착하는 사람까지 도착을 하는 시간을 의미한다.</p>
+
+<p>어떤 사람은 이 시간에 만나기 위하여 1분도 쉬지 않고 달려야 한다. 이런 사람들이 지나는 도로의 수를 카운트 하여라.</p>
+
+<p>출발 도시는 들어오는 도로가 0개이고, 도착 도시는 나가는 도로가 0개이다.</p>
+
+## 입력 
+
+ <p>첫째 줄에 도시의 개수 n(1 ≤ n ≤ 10,000)이 주어지고 둘째 줄에는 도로의 개수 m(1 ≤ m ≤ 100,000)이 주어진다. 그리고 셋째 줄부터 m+2줄까지 다음과 같은 도로의 정보가 주어진다. 처음에는 도로의 출발 도시의 번호가 주어지고 그 다음에는 도착 도시의 번호, 그리고 마지막에는 이 도로를 지나는데 걸리는 시간이 주어진다. 도로를 지나가는 시간은 10,000보다 작거나 같은 자연수이다.</p>
+
+<p>그리고 m+3째 줄에는 지도를 그리는 사람들이 출발하는 출발 도시와 도착 도시가 주어진다.</p>
+
+<p>모든 도시는 출발 도시로부터 도달이 가능하고, 모든 도시로부터 도착 도시에 도달이 가능하다.</p>
+
+## 출력 
+
+ <p>첫째 줄에는 이들이 만나는 시간을, 둘째 줄에는 1분도 쉬지 않고 달려야 하는 도로의 수가 몇 개인지 출력하여라.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+const int MAX = 10'001;
+
+int maxCost[MAX], inDegree[MAX], visited[MAX];
+
+struct edge {
+    int u, v, c, idx;
+};
+
+vector<vector<edge>> conn(MAX), prv(MAX);
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n, m; cin >> n >> m;
+    vector<edge> edges(m);
+    for(int i=0;i<m;i++) {
+        cin >> edges[i].u >> edges[i].v >> edges[i].c;
+        edges[i].idx=i;
+        inDegree[edges[i].v]++;
+        conn[edges[i].u].push_back(edges[i]);
+    }
+    int s, e; cin >> s >> e;
+
+    queue<int> q; q.push(s);
+    while(!q.empty()) {
+        int cur = q.front(); q.pop();
+        for(auto next : conn[cur]) {
+            int nextCost = maxCost[cur]+next.c;
+            if(maxCost[next.v] < nextCost) {
+                maxCost[next.v] = nextCost;
+                prv[next.v] = {next};
+            } else if(maxCost[next.v] == nextCost) {
+                prv[next.v].push_back(next);
+            }
+            if(--inDegree[next.v]==0) q.push(next.v);
+        }
+    }
+
+    q.push(e);
+    int cnt=0;
+    while(!q.empty()) {
+        int cur = q.front(); q.pop();
+        cnt += prv[cur].size();
+        for(auto p : prv[cur]) {
+            if(!visited[p.u]) {
+                visited[p.u]=true;
+                q.push(p.u);
+            }
+        }
+    }
+    cout << maxCost[e] << '\n' << cnt;
+}
+```
+
+# [Platinum V] 공장
+
+[문제 링크](https://www.acmicpc.net/problem/7578) 
+
+## 문제 설명
+
+<p>어떤 공장에는 2N개의 기계가 2열에 걸쳐 N개씩 배치되어 있다. 이 2개의 열을 각각 A열과 B 열이라고 부른다. A열에 있는 N개의 기계는 각각이 B열에 있는 N개의 기계와 하나씩 짝을 이루어 케이블로 연결되어 있다. 즉, A열의 임의의 기계는 B열의 유일한 기계와 케이블로 연결되어 있고, B열의 임의의 기계는 A열의 유일한 기계와 케이블로 연결되어 있다</p>
+
+<p>또한, 각 기계에는 식별번호가 붙어있으며, 짝이 맺어진 기계끼리는 같은 식별번호가 붙어있다. 즉, 각 열에 있는 N개의 기계끼리는 서로 다른 식별번호를 가지고 있으며, 반대쪽 열에 있는 같은 식별번호를 가진 기계와 케이블로 이어져 있다.</p>
+
+<p>공장 작업의 효율성을 위해 기계들은 짝을 맺은 순서대로 배치되지 않으며, 필요에 따라 각 열의 기계들의 순서를 바꾼 바람에 케이블은 마구 엉켜있는 상태이다. 이렇게 엉켜버린 케이블은 잦은 고장의 원인이 되기 때문에, 기계의 위치를 바꾸지 않은 상태에서 케이블을 두 기계를 잇는 직선의 형태로 만들기로 했다.</p>
+
+<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/e78a497b-7a88-4dfb-bdc7-4e26759187a6/-/preview/" style="width: 264px; height: 103px;"></p>
+
+<p>예를 들어, 위의 그림과 같이 N = 5이고, A열에 위치한 기계의 식별번호가 순서대로 132, 392, 311, 351, 231이고 B열에 위치한 기계의 식별번호가 순서대로 392, 351, 132, 311, 231이라면 케이블들의 교차 횟수 혹은 서로 교차하는 케이블 쌍의 개수는 3이 된다.</p>
+
+<p>정수 N과 A열에 위치한 기계, B열에 위치한 기계의 식별번호가 각각 순서대로 주어질 때에 서로 교차하는 케이블 쌍의 개수를 정확하게 세어 출력하는 프로그램을 작성하시오.</p>
+
+## 입력 
+
+ <p>입력은 세 줄로 이루어져 있다. 첫 줄에는 정수 N이 주어지며, 두 번째 줄에는 A열에 위치한 N개 기계의 서로 다른 식별번호가 순서대로 공백문자로 구분되어 주어진다. 세 번째 줄에는 B열에 위치한 N개의 기계의 식별번호가 순서대로 공백문자로 구분되어 주어진다.</p>
+
+<p>단, 1 ≤ N ≤ 500,000이며, 기계의 식별번호는 모두 0 이상 1,000,000 이하의 정수로 주어진다.</p>
+
+## 출력 
+
+ <p>여러분은 읽어 들인 2N개의 기계의 배치로부터 서로 교차하는 케이블 쌍의 개수를 정수 형태로 한 줄에 출력해야 한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+const int MAX = 1'000'001;
+
+int _size=1;
+int idx[MAX], arr[MAX*4];
+
+void update(int i) {
+    i += _size/2;
+    arr[i]++;
+    while(i>1) {
+        i>>=1;
+        arr[i] = arr[i*2]+arr[i*2+1];
+    }
+}
+
+int search(int L, int R, int nodeNum=1, int nodeL=0, int nodeR=_size/2-1) {
+    if(R<nodeL || nodeR<L) return 0;
+    if(L<=nodeL && nodeR<=R) return arr[nodeNum];
+    int mid = (nodeL+nodeR)/2;
+    return search(L, R, nodeNum*2, nodeL, mid) + search(L, R, nodeNum*2+1, mid+1, nodeR);
+}
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n; cin >> n;
+    for(int i=0;i<n;i++) {
+        int num; cin >> num;
+        idx[num]=i;
+    }
+    while(_size<MAX) _size<<=1;
+    _size<<=1;
+
+    long long cnt=0;
+    for(int i=_size/2;i<_size/2+n;i++) {
+        int num; cin >> num;
+        cnt += search(idx[num], _size/2-1);
+        update(idx[num]);
+    }
+    cout << cnt;
+}
+```
+
+# A. Collatz Conjecture
+[문제 링크](https://codeforces.com/contest/2137/problem/A)
+
+## Problem Statement
+
+You are doing a research paper on the famous Collatz Conjecture. In your experiment, you start off with an integer $x$, and you do the following procedure $k$ times:
+
+- If $x$ is even, divide $x$ by $2$.
+- Otherwise, set $x$ to $3\cdot x + 1$.
+
+For example, starting off with $21$ and doing the procedure $5$ times, you get
+$21 \rightarrow 64 \rightarrow 32 \rightarrow 16 \rightarrow 8 \rightarrow 4 .$
+
+After all $k$ iterations, you are left with the final value of $x$. Unfortunately, you forgot the initial value. Please output **any** possible initial value of $x$.
+
+## Input
+
+Each test contains multiple test cases. The first line contains the number of test cases $t$ $(1 \le t \le 400)$. The description of the test cases follows.
+
+The first line of each test case contains two integers $k$ and $x$ $(1 \le k, x \le 20)$.
+
+## Output
+
+For each test case, print any possible initial value on a new line. It can be shown that the answer always exists.
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t;
+    while(t--) {
+        ll k, x; cin >> k >> x;
+        while(k--) x*=2;
+        cout << x << '\n';
+    }
+}
+```
+
+# B. Fun Permutation
+[문제 링크](https://codeforces.com/contest/2137/problem/B)
+
+## Problem Statement
+
+You are given a permutation $p$ of size $n$.
+
+Your task is to find a permutation $q$ of size $n$ such that $\gcd(p_i+q_i, p_{i+1}+q_{i+1}) \ge 3$ for all $1 \le i < n .$ In other words, the greatest common divisor of the sums at any two adjacent positions should be at least $3$.
+
+It can be shown that this is always possible.
+
+## Input
+
+Each test contains multiple test cases. The first line contains the number of test cases $t$ $(1 \le t \le 10^{4})$. The description of the test cases follows.
+
+The first line contains an integer $n$ $(2 \le n \le 2\cdot 10^{5})$.
+
+The second line contains $n$ integers $p_1, p_2, \ldots, p_n$ $(1 \le p_i \le n)$.
+
+It is guaranteed that the given array forms a permutation.  
+
+It is guaranteed that the sum of $n$ over all test cases does not exceed $2\cdot 10^{5}$.
+
+## Output
+
+For each test case, output the permutation $q$ on a new line. If there are multiple possible answers, you may output any.
+
+## Footnotes
+A permutation of length $m$ is an array consisting of $m$ distinct integers from $1$ to $m$ in arbitrary order.  For example, [2,3,1,5,4] is a permutation, but [1,2,2] is not a permutation (2 appears twice in the array), and [1,3,4] is also not a permutation (m=3 but there is 4 in the array).
+
+$\gcd(x,y)$ denotes the [greatest common divisor (GCD)](https://en.wikipedia.org/wiki/Greatest_common_divisor) of integers $x$ and $y$.
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t;
+    while(t--) {
+        int n; cin >> n;
+        for(int i=0;i<n;i++) {
+            int p; cin >> p;
+            cout << n-p+1 << ' ';
+        }
+        cout << '\n';
+    }
+}
+```
+
+# C. Maximum Even Sum
+[문제 링크](https://codeforces.com/contest/2137/problem/C)
+
+## Problem Statement
+
+You are given two integers $a$ and $b$. You are to perform the following procedure:
+
+First, choose an integer $k$ such that $b$ is divisible by $k$. Then, simultaneously multiply $a$ by $k$ and divide $b$ by $k$.
+
+Find the greatest possible **even** value of $a+b$. If it is impossible to make $a+b$ even, output $-1$ instead.
+
+## Input
+
+Each test contains multiple test cases. The first line contains the number of test cases $t$ $(1 \le t \le 10^{4})$. The description of the test cases follows.
+
+The first line of each test case contains two integers $a$ and $b$ $(1 \le a, b \le a\cdot b \le 10^{18})$.
+
+## Output
+
+For each test case, output the maximum **even** value of $a+b$ on a new line.
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t;
+    while(t--) {
+        ll a, b; cin >> a >> b;
+
+        if(b%2==0) {
+            if((a*(b/2)+2)%2==1) cout << "-1\n";
+            else cout << a*(b/2)+2 << '\n';
+        } else if(a%2==0 && b%2==1) {
+            cout << "-1\n";
+        } else {
+            cout << a*b+1 << '\n';
+        }
+    }
+}
+```
+
+# D. Replace with Occurrences
+[문제 링크](https://codeforces.com/contest/2137/problem/D)
+
+## Problem Statement
+
+Given an array $a$, let $f(x)$ be the number of occurrences of $x$ in the array $a$. For example, when $a=[1,2,3,1,4]$, then $f(1)=2$ and $f(3)=1$.
+
+You are given an array $b$ of size $n$. Determine whether there exists an array $a$ of size $n$ such that
+$f(a_i)=b_i \quad \text{for all } 1\le i\le n.$ If there is one, construct it.
+
+## Input
+
+Each test contains multiple test cases. The first line contains the number of test cases $t$ $(1 \le t \le 10^{4})$. The description of the test cases follows.
+
+The first line contains an integer $n$ $(1 \le n \le 2\cdot10^{5})$.
+
+The second line contains $n$ integers $b_1,b_2,\ldots,b_n$ $(1 \le b_i \le n)$.
+
+It is guaranteed that the sum of $n$ over all test cases does not exceed $2\cdot10^{5}$.
+
+## Output
+
+For each test case, output `-1` if there is no valid array $a$.
+
+Otherwise, print an array $a$ of $n$ integers on a new line such that $1 \le a_i \le n$.
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t;
+    while(t--) {
+        int n; cin >> n;
+
+        ll need=0;
+        vector<int> b(n), cnt(n+1);
+        for(int i=0;i<n;i++) {
+            cin >> b[i];
+            cnt[b[i]]++;
+        }
+
+        for(int i=1;i<=n;i++) {
+            if(cnt[i]%i==0) need += cnt[i];
+            else need += n+1;
+        }
+
+        if(need!=n) cout << "-1\n";
+        else {
+            int cur=1;
+            vector<int> last(n+1);
+            for(int i=0;i<n;i++) {
+                if(cnt[b[i]]/b[i] != (--cnt[b[i]])/b[i]) last[b[i]]=cur++;
+                cout << last[b[i]] << ' ';
+            }
+            cout << '\n';
+        }
+    }
+}
+```
+
+# E. Mexification
+[문제 링크](https://codeforces.com/contest/2137/problem/E)
+
+## Problem Statement
+
+You are given an array $a$ of size $n$ and an integer $k$. You do the following procedure $k$ times:
+
+- For each element $a_i$, you set $a_i$ to $\operatorname{mex}(a_1, a_2, \ldots, a_{i-1}, a_{i+1}, a_{i+2}, \ldots, a_n)$.  
+  In other words, you set $a_i$ to the $\operatorname{mex}$ of all other elements in the array.  
+  **This is done for all elements in the array at the same time.**
+
+Please find the sum of elements in the array after all $k$ operations.
+
+## Input
+
+Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \le t \le 10^4$).  
+The description of the test cases follows.
+
+The first line contains two integers $n$ and $k$ ($2 \leq n \leq 2 \cdot 10^5,\ 1 \leq k \leq 10^9$) — the number of elements in $a$ and the number of operations done.  
+
+The second line contains $n$ integers $a_1, a_2, \ldots, a_n$ ($0 \leq a_i \leq n$).
+
+It is guaranteed that the sum of $n$ over all test cases does not exceed $2 \cdot 10^5$.
+
+## Output
+
+For each test case, output the sum of elements after all $k$ operations on a new line.
+
+## Footnotes
+The minimum excluded (MEX) of a collection of integers $d_1, d_2, \ldots, d_k$ is defined as the smallest non-negative integer $x$ which does not occur in the collection $d$.
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t;
+    while(t--) {
+        int n, k; cin >> n >> k;
+        vector<int> a(n), cnt(n+2);
+        for(int i=0;i<n;i++) {
+            cin >> a[i];
+            cnt[a[i]]++;
+        }
+
+        int goal;
+        for(int i=0;i<5;i++) {
+            if(k) {
+                goal=n+1;
+                for(int i=0;i<=n;i++) {
+                    if(cnt[i]==0) {
+                        goal=i;
+                        break;
+                    }
+                }
+
+                for(int i=0;i<n;i++) {
+                    if(goal<a[i] || cnt[a[i]]!=1) {
+                        a[i]=goal;
+                    }
+                }
+
+                cnt = vector<int>(n+2);
+                for(int i=0;i<n;i++) cnt[a[i]]++;
+
+                goal=n+1;
+                for(int i=0;i<=n;i++) {
+                    if(cnt[i]==0) {
+                        goal=i;
+                        break;
+                    }
+                }
+                k--;
+            }
+        }
+
+        ll sum=0;
+        for(int i=0;i<n;i++) {
+            if(k%2==0 || cnt[a[i]]==1) sum += a[i];
+            else sum += goal;
+        }
+        cout << sum << '\n';
+    }
+}
+```
+
+# [Bronze V] Class Photo
+
+[문제 링크](https://www.acmicpc.net/problem/34281) 
+
+## 문제 설명
+
+<p>Every year, the Mines freshman class assembles on the football field to take a class photo. Usually, the students arrange themselves to create a giant M. Unfortunately, the students took too long to set up, causing Blaster to get hungry and eat the ropes outlining the M. Thinking quickly, the teachers assemble the students in a rectangle. Given that this rectangle is $w$ people by $l$ people, how many students are in the freshman class?</p>
+
+## 입력 
+
+ <p>The first line of input contains a single integer $w$ ($1 \leq w \leq 10^4$), the width of the rectangle.</p>
+
+<p>The second line of input contains a single integer $l$ ($1 \leq l \leq 10^4$), the length of the rectangle. </p>
+
+## 출력 
+
+ <p>The only line of output should be a single integer, the total number of students in the freshman class.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int w, l; cin >> w >> l;
+    cout << w*l;
+}
+```
+
+# [Gold V] 사과나무
+
+[문제 링크](https://www.acmicpc.net/problem/19539) 
+
+## 문제 설명
+
+<p>이하는 최근 사과나무 씨앗을 구매하여 농장 뒷뜰에 일렬로 $1$번부터 $N$번까지 심었다. 이 나무들의 초기 높이는 모두 $0$이다.</p>
+
+<p>사과나무를 무럭무럭 키우기 위해 이하는 물뿌리개 $2$개를 준비했다. 한 물뿌리개는 나무 하나를 $1$만큼 성장시키고, 다른 물뿌리개는 나무 하나를 $2$만큼 성장시킨다. 이 물뿌리개들은 동시에 사용해야 하며, 물뿌리개를 나무가 없는 토양에 사용할 수는 없다. 두 물뿌리개를 한 나무에 사용하여 $3$만큼 키울 수도 있다.</p>
+
+<p>물뿌리개 관리 시스템을 전부 프로그래밍한 이하는 이제 사과나무를 키워보려고 했다. 그 순간, 갊자가 놀러와서 각 사과나무의 높이가 이런 배치가 되었으면 좋겠다고 말했다. 이제 이하는 약간 걱정이 되기 시작했는데, 갊자가 알려준 사과나무의 배치를 이 프로그램 상으로 만들어내지 못할 수도 있기 때문이다.</p>
+
+<p>이하는 이제 프로그램을 다시 수정하느라 바쁘기 때문에, 두 물뿌리개를 이용해 갊자가 알려준 사과나무의 배치를 만들 수 있는지의 여부를 판단하는 과정은 여러분의 몫이 되었다.</p>
+
+## 입력 
+
+ <p>첫 번째 줄에는 자연수 $N$이 주어진다. ($ 1 \leq N \leq 100\ 000$) 이는 이하가 뒷뜰에 심은 사과나무의 개수를 뜻한다.</p>
+
+<p>두 번째 줄에는 $N$개의 정수 $h_1,h_2,\cdots,h_N$이 공백으로 구분되어 주어진다. ($ 0 \leq h_i \leq 10\ 000$) $h_i$는 갊자가 바라는 $i$번째 나무의 높이이다.</p>
+
+## 출력 
+
+ <p>첫 번째 줄에 모든 나무가 갊자가 바라는 높이가 되도록 물뿌리개를 통해 만들 수 있으면 “<span style="color:#e74c3c;"><code>YES</code></span>”를, 아니면 “<span style="color:#e74c3c;"><code>NO</code></span>”를 따옴표를 제외하고 출력한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int N; cin >> N;
+
+    int cnt1=0, cnt2=0;
+    while(N-->0) {
+        int h; cin >> h;
+        cnt2 += h/2;
+        cnt1 += h%2;
+    }
+
+    if(cnt2<cnt1 || (cnt2-cnt1)%3) cout << "NO";
+    else cout << "YES";
 }
 ```
