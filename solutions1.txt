@@ -3365,3 +3365,155 @@ int main() {
     else cout << "YES";
 }
 ```
+
+# A. Maple and Multiplication
+[문제 링크](https://codeforces.com/contest/2139/problem/A)
+
+## Problem Statement
+
+Maple has two positive integers $a$ and $b$. She may perform the following operation any number of times (possibly zero) to make $a$ equal to $b$:
+
+- Choose any positive integer $x$, and multiply either $a$ or $b$ by $x$.
+
+Your task is to determine the minimum number of operations required to make $a$ equal to $b$. It can be proven that this is always possible.
+
+## Input
+Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \le t \le 100$). The description of the test cases follows.
+
+The first and only line of each test case contains two positive integers $a$ and $b$ ($1 \le a, b \le 1000$) — the numbers Maple currently has.
+
+## Output
+For each test case, output a single integer representing the minimum number of operations Maple needs to make $a$ equal to $b$.
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t;
+    while(t--) {
+        ll a, b; cin >> a >> b;
+        if(a<b) swap(a, b);
+        if(a==b) cout << "0\n";
+        else if(a%b==0) cout << "1\n";
+        else cout << "2\n";
+    }
+}
+```
+
+# B. Cake Collection
+[문제 링크](https://codeforces.com/contest/2139/problem/B)
+
+## Problem Statement
+Maple wants to bake some cakes for Chocola and Vanilla.  
+
+One day, she discovers $n$ magical cake ovens. The $i$-th oven bakes $a_i$ cakes every second. The cakes remain in their respective ovens until they are collected.  
+
+At the end of each second, she may teleport to any oven (including the one she is currently at) and collect all the cakes that have accumulated in that oven up to that point.  
+
+Your task is to determine the maximum number of cakes Maple can collect in $m$ seconds.  
+
+## Input
+Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \le t \le 1000$). The description of the test cases follows.  
+
+The first line of each test case contains two integers $n$ and $m$ ($1 \leq n \leq 10^5$, $1\leq m\leq 10^8$) — the number of magical ovens and the number of seconds during which Maple will collect cakes.  
+
+The second line of each test case contains $n$ integers $a_1,a_2,\ldots,a_n$ ($1 \leq a_i \le 10^5$) — the number of cakes the $i$-th oven bakes every second.  
+
+It is guaranteed that the sum of $n$ over all test cases does not exceed $2 \cdot 10^5$.  
+
+## Output
+For each test case, output a single integer representing the maximum number of cakes Maple can collect in $m$ seconds.  
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t;
+    while(t--) {
+        ll n, m; cin >> n >> m;
+        vector<ll> a(n);
+        for(int i=0;i<n;i++) cin >> a[i];
+        sort(a.begin(), a.end(), greater<ll>());
+
+        ll sum=0;
+        for(int i=0;i<n && m>0;i++) sum += a[i]*m--;
+        cout << sum << '\n';
+    }
+}
+```
+
+# C. Cake Assignment
+[문제 링크](https://codeforces.com/contest/2139/problem/C)
+
+## Problem Statement
+
+Chocola and Vanilla love cakes. Today, the manager of a cake shop gave them a total of $2^{k+1}$ cakes. The cakes were distributed evenly, so each of them initially received $2^k$ cakes.  
+
+However, Chocola and Vanilla now want to redistribute the cakes such that Chocola ends up with exactly $x$ cakes and Vanilla gets the remaining $2^{k+1} - x$ cakes.  
+
+In one step, they can perform exactly one of the following two operations:  
+
+1. Chocola gives half of her cakes to Vanilla. This operation is only allowed if Chocola currently has an even number of cakes.  
+2. Vanilla gives half of her cakes to Chocola. This operation is only allowed if Vanilla currently has an even number of cakes.  
+
+Your task is to determine the minimum number of steps required to reach the target distribution and to output any valid sequence of operations achieving that minimum.  
+
+It can be proven that, under the given constraints, a valid solution always exists, and the minimum number of steps required is at most $120$.  
+
+## Input  
+
+Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \le t \le 1000$). The description of the test cases follows.  
+
+The first line of each test case contains two integers $k$ and $x$ ($1 \le k \le 60$, $1 \le x \le 2^{k+1} - 1$) — each person initially received $2^k$ cakes, and $x$ is the number of cakes Chocola should have after redistribution.  
+
+## Output  
+
+For each test case, output a single integer $n$ ($0 \le n \le 120$) representing the minimum number of steps required for them to redistribute the cakes accordingly.  
+
+On the next line, output $n$ integers $o_1, o_2, \ldots, o_n$ ($o_i = 1$ or $o_i = 2$), where $o_i = 1$ means that in the $i$-th step, Chocola gave half of her cakes to Vanilla (operation 1), and $o_i = 2$ means that Vanilla gave half of her cakes to Chocola (operation 2).  
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t;
+    while(t--) {
+        ll k, x; cin >> k >> x;
+
+        ll total = 1LL<<k+1;
+        ll a = 1LL<<k;
+        vector<ll> res;
+        while(a!=x) {
+            if(x<total-x) {
+                x<<=1;
+                res.push_back(1);
+            } else {
+                x -= (total-x);
+                res.push_back(2);
+            }
+        }
+
+        cout << res.size() << '\n';
+        for(int i=res.size()-1;i>=0;i--) cout << res[i] << ' ';
+        cout << '\n';
+    }
+}
+```
