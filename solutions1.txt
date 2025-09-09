@@ -3517,3 +3517,240 @@ int main() {
     }
 }
 ```
+
+# [Gold V] 힝스티비
+
+[문제 링크](https://www.acmicpc.net/problem/34242) 
+
+## 문제 설명
+
+<p>덧셈, 뺄셈, <em><strong style="background-color:#000;background-image:linear-gradient(163deg,#000 0%,#999 50%,#000 100%);background-size:100%;-webkit-background-clip:text;-moz-background-clip:text;-webkit-text-fill-color:transparent;-moz-text-fill-color:transparent;">XOR</strong></em>을 공부하던 나도리는 각 연산자를 나열하다가 <strong>표정 문자열</strong>이라는 것을 만들었다. 표정 문자열은 <code>+</code>, <code>-</code>, <code>^</code>으로만 이루어진 문자열이다.<code>+^+</code>은 뭔가 신나 보이는 표정이고, <code>-^-</code>은 뭔가 힝스러운 표정이다.</p>
+
+<p>표정 문자열의 흥미도는 문자열에 존재하는 아래 부분 문자열의 개수에 따라 정해진다.</p>
+
+<ul>
+	<li><code>+^+</code>: 각 $1$점</li>
+	<li><code>-^-</code>: 각 $-1$점</li>
+</ul>
+
+<p>표정 문자열을 만든 후, 월간 향유회 멤버들은 표정 문자열을 이용하여 매일 아침에 운세를 보기 시작했다.</p>
+
+<p>표정 문자열 $S$를 나도리에게 보여 주면, 나도리는 $S$의 흥미도를 알려 준다.</p>
+
+<p>힝스한 표정이 너무 많으면 아침부터 기분도 힝스해지기 때문에 나도리는 기특한 생각을 하나 해 냈다.</p>
+
+<blockquote>
+<p>$S$에서 최대 하나의 문자를 지운 상태에서 흥미도의 최댓값을 알려 주자!</p>
+</blockquote>
+
+<p>표정 문자열이 주어졌을 때 나도리가 적절한 운세를 볼 수 있게 해 주자.</p>
+
+## 입력 
+
+ <p>첫째 줄에 표정 문자열 $S$가 주어진다. ($1 \leq \left\vert S \right\vert \leq 300\,000$)</p>
+
+## 출력 
+
+ <p>첫째 줄에 $S$에서 최대 하나의 문자를 지운 상태에서 흥미도의 최댓값을 출력한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    string s; cin >> s;
+    int n = s.length();
+
+    int cnt=0, erase1=0, erase2=0;
+    for(int i=1;i<n-1;i++) {
+        if(s[i-1]=='+' && s[i]=='^' && s[i+1]=='+') cnt++;
+        else if(s[i-1]=='-' && s[i]=='^' && s[i+1]=='-') cnt--, erase1=1;
+        if(i+2<n && (s[i-1]=='+' && s[i]=='-' && s[i+1]=='^' && s[i+2]=='+' || s[i-1]=='+' && s[i]=='^' && s[i+1]=='-' && s[i+2]=='+' || s[i-1]=='+' && s[i]=='^' && s[i+1]=='^' && s[i+2]=='+')) erase1=1;
+        if(i+3<n && s[i-1]=='-' && s[i]=='^' && s[i+1]=='-' && s[i+2]=='^' && s[i+3]=='-') erase2=2;
+    }
+    cout << cnt+max(erase1, erase2);
+}
+```
+
+# A. Shift Sort
+[문제 링크](https://codeforces.com/contest/2140/problem/A)
+
+## Problem Statement
+
+You are given a binary string<sup>*</sup> $s$ of length $n$ and you are allowed to perform the following operation any number of times (including zero):
+
+- Choose $3$ indices $1 \le i < j < k \le n$ and right shift or left shift the values on $s_i, s_j, s_k$ cyclically.
+
+For the binary string `110110`, if we choose $i=1$, $j=2$, $k=3$ and perform a right shift cyclically, the string becomes `011110`;  
+if we choose $i=4$, $j=5$, $k=6$ and perform a left shift cyclically, the string becomes `110101`.
+
+Determine the minimum number of operations required to sort the given binary string.
+
+## Input
+
+Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \le t \le 100$).  
+The description of the test cases follows.
+
+The first line of each test case contains a single integer $n$ ($3 \le n \le 100$) — the length of the string.
+
+The second line contains a binary string $s$ of length $n$.
+
+## Output
+
+For each test case, output a single integer — the minimum number of operations required to sort the given binary string.
+
+## Footnotes
+
+A binary string* is a string that consists only of the characters `0` and `1`.
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t;
+    while(t--) {
+        int n; string s; cin >> n >> s;
+        int cnt=0;
+        for(int i=0;i<n;i++) if(s[i]=='1') cnt++;
+
+        int need=0;
+        for(int i=n-1;i>=n-cnt;i--) {
+            if(s[i]=='0') need++;
+        }
+        cout << need << '\n';
+    }
+}
+```
+
+# B. Another Divisibility Problem
+[문제 링크](https://codeforces.com/contest/2140/problem/B)
+
+## Problem Statement
+
+Alice and Bob are playing a game in which Alice has given Bob a positive integer $x < 10^8$.
+
+To win the game, Bob has to find another positive integer $y < 10^9$ such that x # y is divisible by $x + y$.
+
+Here x \# y denotes the integer formed by **concatenating** the integers $x$ and $y$ in that order. For example, if $x = 835, y = 47$, then x # y = $83\,547$.
+
+However, since Bob is dumb, he is unable to find such an integer. Please help him.  
+
+It can be shown that such an integer always exists.  
+
+## Input
+
+Each test contains multiple test cases.  
+The first line contains the number of test cases $t$ ($1 \leq t \leq 10^4$).  
+The description of the test cases follows.  
+
+The only line of each test case contains a single integer $x$ ($1 \leq x < 10^8$) — the integer that Alice has given to Bob.  
+
+## Output
+For each test case, print a single integer $y$ ($1 \leq y < 10^9$) so that Bob can win the game.  
+
+If there are multiple answers, print any one of them.
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t;
+    while(t--) {
+        ll x; cin >> x;
+        cout << x*2 << '\n';
+    }
+}
+```
+
+# C. Ultimate Value
+[문제 링크](https://codeforces.com/contest/2140/problem/C)
+
+## Problem Statement
+
+Let's define a function $f(a)$ for an array $a$ of length $n$ as
+$$
+f(a)=\mathrm{cost}+(a_1-a_2+a_3-a_4\cdots a_n)
+$$
+where $\mathrm{cost}$ is zero initially.
+
+Now consider the scenario where Alice and Bob are given an array $a$ of length $n$. They play a game taking at most $10^{100}$ turns alternately with Alice going first.
+
+In each turn, they must perform any **one** (only one) of the following operations:
+
+- End the game for both Alice and Bob.
+- Choose two indices $l,r$ with $1 \le l \le r \le n$ and swap $a_l$ and $a_r$; this adds $(r-l)$ to the $\mathrm{cost}$.
+
+Assume that Alice tries to maximize $f(a)$ and Bob tries to minimize it.
+
+Your task is to determine the final value of $f(a)$ assuming both players play optimally.
+
+## Input
+Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \le t \le 10^4$). The description of the test cases follows.
+
+The first line of each test case contains a single integer $n$ ($1 \le n \le 2\cdot10^5$) — the length of the array $a$.
+
+The second line contains $n$ integers $a_1,a_2,a_3,\ldots,a_n$ ($1 \le a_i \le 10^9$) — the elements of the array $a$.
+
+It is guaranteed that the sum of $n$ over all test cases does not exceed $2\cdot10^5$.
+
+## Output
+For each testcase, output a single integer — the final value of $f(a)$ assuming both players play optimally.
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+ll a[200'001];
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t;
+    while(t--) {
+        int n; cin >> n;
+
+        ll sum=0;
+        for(int i=1;i<=n;i++) {
+            cin >> a[i];
+            if(i%2==1) sum += a[i];
+            else sum -= a[i];
+        }
+
+        ll plus=0;
+        if(n>=2) plus = max((ll)(1-2*a[1]+2*a[2]), (ll)((n-1)/2*2));
+        ll minOdd=a[1], maxEven=a[2], oddIdx=1, evenIdx=2;
+        for(int i=3;i<=n;i++) {
+            if(i%2==1) {
+                plus = max(plus, i-evenIdx - 2*a[i] + 2*maxEven);
+                if(2*minOdd+oddIdx > 2*a[i]+i) {
+                    minOdd = a[i];
+                    oddIdx = i;
+                }
+            } else {
+                plus = max(plus, i-oddIdx - 2*minOdd + 2*a[i]);
+                if(2*maxEven-evenIdx < 2*a[i]-i) {
+                    maxEven = a[i];
+                    evenIdx = i;
+                }
+            }
+        }
+        cout << sum+max(plus, 0LL) << '\n';
+    }
+}
+```
