@@ -3754,3 +3754,483 @@ int main() {
     }
 }
 ```
+
+# [Bronze IV] M-Climb Road
+
+[문제 링크](https://www.acmicpc.net/problem/34306) 
+
+## 문제 설명
+
+<p>Every year, new Colorado School of Mines students climb to the top of Lookout Mountain to place a rock from their hometown onto a structure of rocks in the shape of an M. For this M-Climb, students walk up the road leading up to the M while clubs and organizations line the side of the road with parked cars, cheering the students on and spraying lots of water on them.</p>
+
+<p>The upperclassmen have conspired to have a water gun placed exactly every $N$ feet, with the first being $N$ feet from the beginning of the road. The M-Climb is $W$ miles (one mile is $5280$ feet), and you will be squirted every $N$ feet, including at the $W^{\text{th}}$ mile marker (if there is a water gun there). <strong>How many times will you get squirted?</strong></p>
+
+## 입력 
+
+ <p>The input consists of two lines:</p>
+
+<p>The first line contains a single integer $1 \leq W \leq 10\,000$ representing the length of the road up to the M in miles.</p>
+
+<p>The second line contains a single integer $1 \leq N \leq W$ representing the number of feet between each Mines student with a water gun.</p>
+
+## 출력 
+
+ <p>An integer representing how many times you will get squirted with a water gun. (Remember that there is no water gun at the $0^{th}$ mile marker.)</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int w, n; cin >> w >> n;
+    cout << 5280*w/n;
+}
+```
+
+# [Gold V] Theme Park (Small)
+
+[문제 링크](https://www.acmicpc.net/problem/12593) 
+
+## 문제 설명
+
+<p>Roller coasters are so much fun! It seems like everybody who visits the theme park wants to ride the roller coaster. Some people go alone; other people go in groups, and don't want to board the roller coaster unless they can all go together. And <em>everyone</em> who rides the roller coaster wants to ride again. A ride costs 1 Euro per person; your job is to figure out how much money the roller coaster will make today.</p>
+
+<p>The roller coaster can hold <strong>k</strong> people at once. People queue for it in groups. Groups board the roller coaster, one at a time, until there are no more groups left or there is no room for the next group; then the roller coaster goes, whether it's full or not. Once the ride is over, all of its passengers re-queue in the same order. The roller coaster will run <strong>R</strong> times in a day.</p>
+
+<p>For example, suppose <strong>R</strong>=4, <strong>k</strong>=6, and there are four groups of people with sizes: 1, 4, 2, 1. The first time the roller coaster goes, the first two groups [1, 4] will ride, leaving an empty seat (the group of 2 won't fit, and the group of 1 can't go ahead of them). Then they'll go to the back of the queue, which now looks like 2, 1, 1, 4. The second time, the coaster will hold 4 people: [2, 1, 1]. Now the queue looks like 4, 2, 1, 1. The third time, it will hold 6 people: [4, 2]. Now the queue looks like [1, 1, 4, 2]. Finally, it will hold 6 people: [1, 1, 4]. The roller coaster has made a total of 21 Euros!</p>
+
+## 입력 
+
+ <p>The first line of the input gives the number of test cases, <strong>T</strong>.  <strong>T</strong> test cases follow, with each test case consisting of two lines. The first line contains three space-separated integers: <strong>R</strong>, <strong>k</strong> and <strong>N</strong>. The second line contains <strong>N</strong> space-separated integers <strong>g<sub>i</sub></strong>, each of which is the size of a group that wants to ride.  <strong>g<sub>0</sub></strong> is the size of the first group, <strong>g<sub>1</sub></strong> is the size of the second group, etc.</p>
+
+<h3>Limits</h3>
+
+<ul>
+	<li>1 ≤ <strong>T</strong> ≤ 50.</li>
+	<li><strong>g<sub>i</sub></strong> ≤ <strong>k</strong>.</li>
+	<li>1 ≤ <strong>R</strong> ≤ 1000.</li>
+	<li>1 ≤ <strong>k</strong> ≤ 100.</li>
+	<li>1 ≤ <strong>N</strong> ≤ 10.</li>
+	<li>1 ≤ <strong>g<sub>i</sub></strong> ≤ 10.</li>
+</ul>
+
+## 출력 
+
+ <p>For each test case, output one line containing "Case #x: y", where x is the case number (starting from 1) and y is the number of Euros made by the roller coaster.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t;
+    for(int tc=1;tc<=t;tc++) {
+        int r, k, n; cin >> r >> k >> n;
+        queue<int> q;
+        while(n--) {
+            int g; cin >> g;
+            q.push(g);
+        }
+
+        int total=0;
+        while(r--) {
+            queue<int> tmp;
+            int cur=0;
+            while(!q.empty() && q.front()+cur<=k) cur += q.front(), tmp.push(q.front()), q.pop();
+            while(!tmp.empty()) q.push(tmp.front()), tmp.pop();
+            total += cur;
+        }
+        cout << "Case #" << tc << ": " << total << '\n';
+    }
+}
+```
+
+# [Platinum IV] 님블
+
+[문제 링크](https://www.acmicpc.net/problem/11869) 
+
+## 문제 설명
+
+<p>님블은 1×N 직사각형에서 즐기는 게임이다. 직사각형은 1×1 크기의 정사각형으로 나누어져 있고, 가장 왼쪽 정사각형은 0번, 그 오른쪽 정사각형은 1번, ..., 가장 오른쪽 정사각형은 N-1번이다. 각 정사각형에는 동전이 놓여져 있을 수 있는데, 한 개 이상 놓여져 있을 수도 있다.</p>
+
+<p>두 사람은 턴을 번갈아가면서 게임을 진행한다. 턴은 동전을 하나 고르고, 동전을 왼쪽으로 한 칸 이상 옮기는 것으로 이루어져 있다. </p>
+
+<p>모든 동전이 0에 있으면 게임이 끝나게 되며, 마지막 동전을 0으로 옮긴 사람이 게임을 이긴다.</p>
+
+<p>koosaga와 cubelover는 님블을 하려고 한다. 두 사람이 모두 최적의 방법으로 게임을 했을 때, 이기는 사람을 출력한다. 게임은 koosaga가 먼저 시작한다.</p>
+
+## 입력 
+
+ <p>첫째 줄에 동전의 개수 M (1 ≤ M ≤ 100)이 주어진다.</p>
+
+<p>둘째 줄에는 동전이 놓여져있는 정사각형 칸의 번호 P<sub>i</sub> (1 ≤ P<sub>i</sub> ≤ 10<sup>9</sup>)가 주어진다.</p>
+
+<p>직사각형의 크기는 항상 1×10<sup>10</sup>이다.</p>
+
+## 출력 
+
+ <p>koosaga가 이기는 경우에는 'koosaga'를, cubelover가 이기는 경우에는 'cubelover'를 출력한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int m; cin >> m;
+    int ret=0;
+    while(m--) {
+        int p; cin >> p;
+        ret ^= p;
+    }
+    cout << (ret?"koosaga":"cubelover");
+}
+```
+
+# [Platinum IV] 님 게임 2
+
+[문제 링크](https://www.acmicpc.net/problem/11868) 
+
+## 문제 설명
+
+<p>koosaga와 cubelover가 님 게임을 하고 있다. 님 게임은 돌을 차곡 차곡 위로 쌓아올린 돌 더미 k개를 이용한다. 각각의 돌 더미에는 한 개 이상의 돌이 있다. 두 사람은 서로 턴을 번갈아가면서 님 게임을 진행한다. 각 사람의 턴이 되면, 돌이 있는 돌 더미를 하나 선택하고, 그 돌 더미에서 돌을 하나 이상 제거한다. 전체 돌 더미에서 마지막 돌을 제거하는 사람이 게임을 이기게 된다. </p>
+
+<p>게임은 koosaga가 먼저 시작한다. 두 사람이 최적의 방법으로 게임을 진행했을 때, 이기는 사람을 출력한다.</p>
+
+## 입력 
+
+ <p>첫째 줄에 돌 더미의 개수 N (1 ≤ N ≤ 100)이 주어진다.</p>
+
+<p>둘째 줄에는 각 돌 더미에 쌓여있는 돌의 개수 P<sub>i</sub> (1 ≤ P<sub>i</sub> ≤ 10<sup>9</sup>)가 주어진다.</p>
+
+## 출력 
+
+ <p>koosaga가 이기는 경우에는 'koosaga'를, cubelover가 이기는 경우에는 'cubelover'를 출력한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int m; cin >> m;
+    int ret=0;
+    while(m--) {
+        int p; cin >> p;
+        ret ^= p;
+    }
+    cout << (ret?"koosaga":"cubelover");
+}
+```
+
+# A. Redstone?
+[문제 링크](https://codeforces.com/contest/2133/problem/A)
+
+## Problem Statement
+
+Steve stumbled upon a collection of $n$ gears, where gear $i$ has $a_i$ teeth, and he wants to arrange them into a row.  
+
+After he arranges them, Steve will spin the leftmost gear at a speed of $1$ revolution per second. For each of the other gears, let $x$ be the number of teeth it has, $y$ be the number of teeth of the gear to its left, and $z$ be the speed the gear to its left spins at. Then, its speed will be $\frac{y}{x} \cdot z$ revolutions per second.  
+
+Steve considers the contraption *satisfactory* if the rightmost gear spins at a speed of $1$ revolution per second. Determine whether Steve can rearrange the gears into a satisfactory contraption.  
+
+## Input
+Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \le t \le 1000$). The description of the test cases follows.  
+
+The first line of each test case contains a single integer $n$ ($2 \le n \le 100$) — the number of gears Steve has.  
+
+The second line of each test case contains $n$ integers $a_1, a_2, \ldots, a_n$ ($2 \le a_i \le 100$) — the number of teeth of each gear.  
+
+## Output
+For each test case, print `"YES"` if Steve can rearrange the gears in a satisfactory way, and `"NO"` otherwise.  
+
+You can output the answer in any case (upper or lower). For example, the strings `"yEs"`, `"yes"`, `"Yes"`, and `"YES"` will be recognized as positive responses.  
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t;
+    while(t--) {
+        int n; cin >> n;
+        map<int, int> m;
+        bool chk=false;
+        while(n--) {
+            int a; cin >> a;
+            if(++m[a]==2) {
+                chk=true;
+            }
+        }
+        cout << (chk ? "YES\n" : "NO\n");
+    }
+}
+```
+
+# B. Villagers
+[문제 링크](https://codeforces.com/contest/2133/problem/B)
+
+## Problem Statement
+
+Steve lives in a village with $n$ other villagers. Unfortunately, due to disputes over the distribution of emeralds, none of those villagers are friends with any other villager. Furthermore, villager $i$ initially has a *grumpiness* of $g_i$.  
+
+Steve can perform the following operation any number of times:
+
+- Select two villagers $i$ and $j$ and give them $\max(g_i, g_j)$ emeralds to share. Both of their grumpinesses decrease by $\min(g_i, g_j)$, and they become friends with each other if they weren't already.  
+
+Steve wishes to make every villager friends with every other villager (possibly through some intermediate friendships); that is, from any villager, you can follow a path of friendships to reach any other villager. Since he does not want to inflate the village economy too much, calculate the minimum number of emeralds he must give away to accomplish this.  
+
+## Input  
+Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \le t \le 10^4$). The description of the test cases follows.  
+
+The first line of each test case contains a single integer $n$ ($2 \le n \le 2 \cdot 10^5$) — the number of villagers.  
+
+The second line of each test case contains $n$ integers $g_1, g_2, \ldots, g_n$ ($1 \le g_i \le 10^9$) — the initial grumpiness of each villager.  
+
+It is guaranteed that the sum of $n$ over all test cases does not exceed $2 \cdot 10^5$.  
+
+## Output  
+For each test case, output a single integer — the minimum number of emeralds Steve must give away to make everyone friends.  
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t;
+    while(t--) {
+        int n; cin >> n;
+        vector<ll> g(n);
+        for(int i=0;i<n;i++) cin >> g[i];
+        sort(g.begin(), g.end(), greater<int>());
+
+        ll sum=0;
+        for(int i=0;i<n;i+=2) sum += g[i];
+        cout << sum << '\n';
+    }
+}
+```
+
+# C. The Nether
+[문제 링크](https://codeforces.com/contest/2133/problem/C)
+
+## Problem Statement
+
+*This is an interactive problem.*  
+
+Having recently discovered The Nether, Steve has built a network of $n$ nether portals, each at a different location in his world.  
+
+Each portal is connected in one direction to some number (possibly zero) of other portals. To avoid getting lost, Steve has carefully built the network of portals so that there is no sequence of jumps through portals that will bring you from a location back to itself; formally, the network forms a directed acyclic graph.  
+
+Steve refuses to tell you which portals are connected to which, but he will allow you to ask queries. In each query, you give Steve a set of locations $S$ = {$s_1,s_2,\ldots,s_k$} and a starting location $x\in S$. Steve will figure out the longest path starting at $x$ that only passes through locations in $S$ and tell you the number of locations in it. (If it is impossible to reach any other location in $S$ from $x$, Steve will reply with $1$.)  
+
+As you are looking to obtain the achievement “Hot Tourist Destinations”, you want to find any path that visits as many locations as possible. Steve is feeling particularly generous and will give you $2\cdot n$ queries to find it.  
+
+## Input
+
+Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1\le t\le 1000$). The description of the test cases follows.  
+
+The only line of each test case contains a single integer $n$ ($2\le n\le 500$) — the number of locations.  
+
+It is guaranteed that the sum of $n^3$ over all test cases does not exceed $500^3$.  
+
+## Interaction
+
+The interaction for each test case begins with reading the integer $n$. Then you can make up to $2\cdot n$ queries.  
+
+To make a query, output a line in the following format:  
+
+- $? x k s_1 s_2 \ldots s_k$  
+
+The jury will return the answer to the query.  
+
+When you find a path with maximum length, output a single line in the following format:  
+
+- $! k v_1 v_2 \ldots v_k$  
+
+This denotes starting at portal $v_1$, then jumping to $v_2$, then to $v_3$ and so on, ending at $v_k$.  
+
+Note that outputting the answer **does not count** towards the limit of $2\cdot n$ queries.  
+
+After printing each query do not forget to output the end of line and flush$^{\ast}$ the output. Otherwise, you will get `Idleness limit exceeded` verdict.  
+
+If, at any interaction step, you read $-1$ instead of valid data, your solution must exit immediately. This means that your solution will receive `Wrong answer` because of an invalid query or any other mistake. Failing to exit can result in an arbitrary verdict because your solution will continue to read from a closed stream.  
+
+The interactor is **not adaptive**. The connections between portals do not change during the interaction.  
+
+## Hacks
+To perform a hack, use the following format:  
+
+Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1\le t\le 1000$). The description of the test cases follows.  
+
+The first line of each test case contains a single integer $n$ ($2\le n\le 500$) — the number of locations.  
+
+Then, output $n$ lines. The $i$-th line should be of the form $k_i\,v_1\,v_2\,\ldots\,v_{k_i}$ ($0\le k_i\le n-1$, $1\le v_j\le n$, $v_j\ne i$), denoting that the portal at location $i$ is connected in one direction (leads to) locations $v_1,v_2,\ldots,v_{k_i}$. The given network must form a directed acyclic graph.  
+
+The sum of $n^3$ over all test cases must not exceed $500^3$.  
+
+## Footnotes
+To flush, use:  
+- `fflush(stdout)` or `cout.flush()` in C++;  
+- `sys.stdout.flush()` in Python;  
+- see the documentation for other languages.  
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t;
+    while(t--) {
+        int n; cin >> n;
+
+        int deepestIdx, deepestDepth=0;
+        vector<pair<int, int>> candidate;
+        for(int i=1;i<=n;i++) {
+            cout << "? " << i << ' ' << n;
+            for(int j=1;j<=n;j++) cout << ' ' << j;
+            cout << '\n' << flush;
+            int depth; cin >> depth;
+            if(deepestDepth<depth) {
+                deepestDepth = depth;
+                deepestIdx = i;
+            }
+            candidate.push_back({i, depth});
+        }
+        sort(candidate.begin(), candidate.end(), [](auto x, auto y) {return x.second>y.second;});
+
+        for(int i=0;i<candidate.size();i++) {
+            auto cur = candidate[i];
+            if(cur.second==deepestDepth) {
+                if(cur.first!=deepestIdx) candidate.erase(find(candidate.begin(), candidate.end(), cur)), i--;
+                continue;
+            }
+            cout << "? " << deepestIdx << ' ' << candidate.size()-1;
+            for(auto e : candidate) {
+                if(cur.first!=e.first) cout << ' ' << e.first;
+            }
+            cout << '\n' << flush;
+
+            int inputDepth; cin >> inputDepth;
+            if(deepestDepth==inputDepth || i>0 && candidate[i].second==candidate[i-1].second) candidate.erase(find(candidate.begin(), candidate.end(), cur)), i--;
+        }
+
+        cout << "! " << candidate.size();
+        for(auto e : candidate) cout << ' ' << e.first;
+        cout << '\n' << flush;
+    }
+}
+```
+
+# [Bronze V] Parking Pandemonium
+
+[문제 링크](https://www.acmicpc.net/problem/34297) 
+
+## 문제 설명
+
+<p>As part of Colorado School of Mines' 150th anniversary this year, the university is engaged in many infrastructure projects including constructing new buildings and renovating existing ones. These projects include a new innovation center with makerspaces focused on cross-discipline collaboration, increased classroom capacity, additional student housing to allow Mines to accommodate all freshmen and sophomore students, and parking garages to accommodate the rising number of students and faculty.</p>
+
+<p>Unfortunately, the construction of these new buildings has temporarily reduced the amount of available parking in some areas of campus. However, a bright Mines student named Hannah realized that she can find a parking spot if she circles around the parking lot long enough waiting for another student to finish classes and head home. Hannah has determined that it takes exactly $M$ minutes to circle the parking lot once.</p>
+
+<p>Given that Hannah circles the parking lot exactly $C$ times before finally finding a parking spot, how long will it take for her to find a parking spot?</p>
+
+## 입력 
+
+ <p>The first line of input contains a single integer $1 \leq M \leq 10^4$, the time (in minutes) it takes for Hannah to circle the parking lot once.</p>
+
+<p>The second line of input contains a single integer $250 \leq K \leq 320$, the temperature (in Kelvin) of the parking lot.</p>
+
+<p>The third line of input contains a single integer $1 \leq C \leq 10^4$, the number of times Hannah has to circle the parking lot before finding a parking spot.</p>
+
+## 출력 
+
+ <p>The first and only line of output should contain a single integer, the total amount of time (in minutes) it takes for Hannah to find a parking spot.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int m, k, c; cin >> m >> k >> c;
+    cout << m*c;
+}
+```
+
+# [Silver I] 밑 줄
+
+[문제 링크](https://www.acmicpc.net/problem/1474) 
+
+## 문제 설명
+
+<p>세준이는 N개의 영어 단어를 이용해 길이가 M인 새로운 단어를 만들려고 한다. 새로운 단어는 N개의 단어를 순서대로 이어 붙이고, 각 단어의 사이에 <code>_</code>을 넣어서 만든다. 이렇게 만든 새로운 단어의 길이가 M이 아닌 경우 <code>_</code>를 추가해서 길이가 M이 되게 만들어야 한다.</p>
+
+<ul>
+	<li><code>_</code>는 단어와 단어 사이에만 추가할 수 있다. 따라서, 새로운 단어는 <code>_</code>으로 시작하거나, <code>_</code>로 끝날 수 없다.</li>
+	<li>단어와 단어 사이에 있는 <code>_</code>의 개수는 모두 같아야 한다.
+	<ul>
+		<li>모두 같게 만드는 것이 불가능한 경우 단어와 단어 사이에 있는 <code>_</code>의 개수의 최댓값과 최솟값의 차이는 1이 되어야 한다.</li>
+	</ul>
+	</li>
+</ul>
+
+<p>새로운 단어 중 사전 순으로 가장 앞서는 단어를 구해보자.</p>
+
+## 입력 
+
+ <p>첫째 줄에 N과 M이 주어진다. 둘째 줄부터 N개의 줄에 단어가 한 줄에 하나씩 주어진다.</p>
+
+## 출력 
+
+ <p>첫째 줄에 사전 순으로 가장 앞서는 단어를 출력한다.</p>
+
+<p>알파벳 대문자, 소문자, 밑 줄의 순서는 'A' < 'B' < 'C' < ... < 'Z' < '_' < 'a' < 'b' < 'c' < ... < 'z' 이다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n, m; cin >> n >> m;
+    vector<string> s(n);
+    for(int i=0;i<n;i++) {
+        cin >> s[i];
+        m -= s[i].length();
+    }
+
+    int extra = m%(n-1);
+    for(int i=0;i<n;i++) {
+        if(i!=0) {
+            for(int j=0;j<m/(n-1);j++) cout << '_';
+            if(extra && (s[i][0]>='a' || n-i==extra)) cout << '_', extra--;
+        }
+        cout << s[i];
+    }
+}
+```
