@@ -4234,3 +4234,470 @@ int main() {
     }
 }
 ```
+
+# [Platinum II] 크로스와 크로스
+
+[문제 링크](https://www.acmicpc.net/problem/3596) 
+
+## 문제 설명
+
+<p>크로스와 크로스 게임은 1 × n칸으로 이루어진 보드에서 진행한다. 두 플레이어는 서로 번갈아가면서 게임을 한며, 각 칸의 크기는 1 × 1이다.</p>
+
+<p>각 플레이어는 자기 턴일때, 빈 칸중 한 곳에 '×' 마크를 한다.</p>
+
+<p>만약, 어떤 플레이어가 연속된 3개의 '×'를 만들 수 있다면 그 플레이어가 이긴다.</p>
+
+<p>n이 주어졌을 때, 두 플레이어가 현재 턴에서 선택할 수 있는 가장 좋은 방법으로 게임을 했을 때, 이기는 사람을 구하는 프로그램을 작성하시오.</p>
+
+## 입력 
+
+ <p>첫째 줄에 n이 주어진다. (3 ≤ n ≤ 2000)</p>
+
+## 출력 
+
+ <p>첫 번째 플레이어가 이긴다면 1을, 두 번째 플레이어가 이긴다면 2를 출력한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+const int MAX = 2001;
+
+int g[MAX];
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n; cin >> n;
+
+    for(int i=1;i<=n;i++) {
+        set<int> grundies;
+        grundies.insert(g[max(0, i-3)]);
+        grundies.insert(g[max(0, i-4)]);
+        for(int j=0;j<=i-5;j++) grundies.insert(g[j]^g[i-5-j]);
+
+        for(int j=0;;j++) {
+            if(!grundies.count(j)) {
+                g[i]=j;
+                break;
+            }
+        }
+    }
+    cout << (g[n] ? 1 : 2);
+}
+```
+
+# A. Sublime Sequence
+[문제 링크](https://codeforces.com/contest/2148/problem/A)
+
+## Problem Statement
+Farmer John has an integer $x$. He creates a sequence of length $n$ by alternating integers $x$ and $-x$, starting with $x$.
+
+For example, if $n = 5$, the sequence looks like: $x, -x, x, -x, x$.
+
+He asks you to find the sum of all integers in the sequence.
+
+## Input
+The first line contains an integer $t$ ($1 \leq t \leq 100$) — the number of test cases.
+
+The only line of input for each test case is two integers $x$ and $n$ ($1 \leq x, n \leq 10$).
+
+## Output
+For each test case, output the sum of all integers in the sequence.
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t;
+    while(t--) {
+        int x, n; cin >> x >> n;
+        if(n%2) cout << x << '\n';
+        else cout << "0\n";
+    }
+}
+```
+
+# B. Lasers
+[문제 링크](https://codeforces.com/contest/2148/problem/B)
+
+## Problem Statement
+There is a 2D-coordinate plane that ranges from $(0, 0)$ to $(x, y)$. You are located at $(0, 0)$ and want to head to $(x, y)$.
+
+However, there are $n$ horizontal lasers, with the $i$-th laser continuously spanning $(0, a_i)$ to $(x, a_i)$. Additionally, there are also $m$ vertical lasers, with the $i$-th laser continuously spanning $(b_i, 0)$ to $(b_i, y)$.
+
+You may move in any direction to reach $(x, y)$, but your movement must be a continuous curve that lies inside the plane. Every time you cross a vertical or a horizontal laser, it counts as one crossing. Particularly, if you pass through an intersection point between two lasers, it counts as **two crossings**.
+
+For example, if $x = y = 2$, $n = m = 1$, $a = [1]$, $b = [1]$, the movement can be as follows:
+
+<center>
+<img src="https://espresso.codeforces.com/44cd14d5698957fd058be07680bad092035229a0.png" width="300"/>
+</center>
+
+Minimum crossings = 2 (must cross $x=1$ and $y=1$ once each).  
+
+## Input
+The first line contains $t$ ($1 \leq t \leq 10^4$) — the number of test cases.  
+
+The first line of each test case contains four integers $n, m, x, y$ ($1 \leq n, m \leq 2 \cdot 10^5$, $2 \leq x, y \leq 10^9$).  
+
+The following line contains $n$ integers $a_1, a_2, \ldots, a_n$ ($0 < a_i < y$) — the y-coordinates of the horizontal lasers. It is guaranteed that $a_i > a_{i-1}$ for all $i > 1$.  
+
+The following line contains $m$ integers $b_1, b_2, \ldots, b_m$ ($0 < b_i < x$) — the x-coordinates of the vertical lasers. It is guaranteed that $b_i > b_{i-1}$ for all $i > 1$.  
+
+It is guaranteed that the sum of $n$ and $m$ over all test cases does not exceed $2 \cdot 10^5$.
+
+## Output
+For each test case, output the minimum number of crossings necessary to reach $(x, y)$.
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t;
+    while(t--) {
+        int n, m, x, y; cin >> n >> m >> x >> y;
+        int tmp;
+        for(int i=0;i<n;i++) cin >> tmp;
+        for(int i=0;i<m;i++) cin >> tmp;
+        cout << n+m << '\n';
+    }
+}
+```
+
+# C. Pacer
+[문제 링크](https://codeforces.com/contest/2148/problem/C)
+
+## Problem Statement
+*The FitnessGram Pacer Test is a multistage aerobic capacity test that progressively gets more difficult as it continues. The 20 meter pacer test will begin in 30 seconds. Line up at the start. A single lap should be completed every time you hear this sound. Ding! Remember to run in a straight line and run as long as possible. The test will begin on the word start. On your mark. Get ready!...*  
+
+Farmer John is running the FitnessGram Pacer Test! Farmer John takes **one minute** to run to the other side of the gym. Therefore, at the start of each minute, FJ can choose to either run to the other side of the gym or stay in place. If he chooses to run to the other side of the gym, he gains **one point**.
+
+FJ will run the Pacer Test until the start of the $m$-th minute. Initially (at the start of the $0$-th minute), FJ is at the starting side of the gym, which we will denote as side $0$. The opposite side of the gym is denoted side $1$.
+
+The pacer test audio plays $n$ times. At the start of the $a_i$-th minute, FJ must be at the $b_i$-th side of the gym.
+
+What is the maximum number of points FJ can acquire while ensuring that he meets the audio's requirements?
+
+## Input
+The first line contains an integer $t$ ($1 \leq t \leq 10^4$) — the number of test cases.  
+
+The first line of each test case contains two integers $n$ and $m$ ($1 \leq n \leq 2 \cdot 10^5, n \leq m \leq 10^9$) — the number of requirements and the number of total minutes.  
+
+The following $n$ lines contain two integers $a_i$ and $b_i$ ($1 \leq a_i \leq m, b_i \in \{0,1\}$) — the $i$-th requirement by the audio. It is guaranteed that $a_i > a_{i-1}$ for all $i > 1$.  
+
+It is guaranteed that the sum of $n$ over all test cases does not exceed $2 \cdot 10^5$.
+
+## Output
+For each test case, output the maximum number of points that FJ can acquire.
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t;
+    while(t--) {
+        int n, m; cin >> n >> m;
+        int point=0, lastA=0, pos=0;
+        while(n--) {
+            int a, b; cin >> a >> b;
+            if(((a-lastA)%2==0) == (pos==b)) point += a-lastA;
+            else point += a-lastA-1;
+            lastA = a;
+            pos = b;
+        }
+        cout << point + (m-lastA) << '\n';
+    }
+}
+```
+
+# D. Destruction of the Dandelion Fields
+[문제 링크](https://codeforces.com/contest/2148/problem/D)
+
+## Problem Statement
+
+Farmer John has a lawnmower, initially turned off. He also has $n$ fields, with the $i$-th field having $a_i$ dandelions. He will visit all the fields in any order he wants, and each field **exactly once**.
+
+FJ's lawnmower seems to have a mind of its own. Right before visiting a field, it checks if the field has an even or odd number of dandelions. If it has an odd number, then the lawnmower toggles its state (if it is off, it turns on; if it is on, it turns off). Then, if the lawnmower is on, it will cut all dandelions in that field. Otherwise, if the lawnmower is off, then FJ will simply visit the field and cut no dandelions.
+
+If FJ visits the $n$ fields in optimal order, what is the maximum total number of dandelions he can cut?
+
+## Input
+
+The first line contains an integer $t$ ($1 \le t \le 10^4$) — the number of test cases.
+
+The first line contains an integer $n$ ($1 \le n \le 2 \cdot 10^5$) — the number of fields.
+
+The following line contains $n$ space-separated integers $a_1, a_2, \ldots, a_n$ ($1 \le a_i \le 10^9$) — the number of dandelions in each field.
+
+It is guaranteed that the sum of $n$ over all test cases does not exceed $2 \cdot 10^5$.
+
+## Output
+
+For each test case, output an integer on a new line: maximum dandelions FJ can cut if he visits all $n$ fields in optimal order.
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t;
+    while(t--) {
+        int n; cin >> n;
+
+        vector<ll> odd, even;
+        while(n--) {
+            ll a; cin >> a;
+            if(a%2) odd.push_back(a);
+            else even.push_back(a);
+        }
+
+        ll sum=0;
+        if(!odd.empty()) {
+            sum += accumulate(even.begin(), even.end(), 0LL);
+            sort(odd.begin(), odd.end(), greater<ll>());
+            for(int i=0;i<(odd.size()+1)/2;i++) sum += odd[i];
+        }
+        cout << sum << '\n';
+    }
+}
+```
+
+# E. Split
+[문제 링크](https://codeforces.com/contest/2148/problem/E)
+
+## Problem Statement
+
+Farmer John has an array $a$ containing $n$ positive integers and an integer $k$.
+
+Let $a[l,r]$ be a subarray* of $a$. He performs the following procedure to independently determine if subarray $a[l,r]$ is awesome:
+
+- Initially, FJ has $k$ empty [multisets](https://en.wikipedia.org/wiki/Multiset), numbered from $1$ to $k$.
+- Then, for each element $a_i$ ($1 \le i \le n$) in $a$:
+  - If $l \le i \le r$ (that is, $a_i$ is in the subarray $a[l,r]$), he places $a_i$ in multiset $1$,
+  - Otherwise, he places $a_i$ into any multiset he wants **(which may be multiset $1$)**.
+- Subarray $a[l,r]$ is awesome if there is some way for him to place elements such that, for every value $v$, all multisets contain the same number of elements with value $v$. In other words, he wants to make all multisets contain the exact same elements (ignoring ordering).
+
+Output the number of awesome subarrays.
+
+## Input
+
+The first line contains an integer $t$ ($1 \le t \le 1000$) — the number of test cases.
+
+The first line of each test case contains two integers $n$ and $k$ ($2 \le k \le n \le 2 \cdot 10^5$).
+
+The following line contains $n$ space-separated integers $a_1, a_2, \ldots, a_n$ ($1 \le a_i \le n$).
+
+It is guaranteed that the sum of $n$ over all test cases does not exceed $2 \cdot 10^5$.
+
+## Output
+
+For each testcase, output one integer on a new line: the number of awesome subarrays.
+
+## Footnotes
+
+For array $a$ of size $n$ and integers $1 \le l \le r \le n$, the subarray $a[l,r]$ denotes the array consisting of the elements $a_l,\ldots,a_r$, in order.
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+const int MAX = 200'001;
+
+int n, k;
+int a[MAX], cnt[MAX], cur[MAX];
+
+bool chk() {
+    for(int i=1;i<=n;i++) {
+        if(cnt[i]%k) return false;
+    }
+    return true;
+}
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t;
+    while(t--) {
+        cin >> n >> k;
+
+        memset(cnt, 0, sizeof cnt);
+        for(int i=1;i<=n;i++) {
+            cin >> a[i];
+            cnt[a[i]]++;
+        }
+
+        if(!chk()) {
+            cout << "0\n";
+        } else {
+            memset(cur, 0, sizeof cur);
+            cur[a[1]]++;
+            ll total=0;
+            int l=0, r=1;
+            while(l<n) {
+                l++;
+                while(r<n && (cur[a[r+1]]+1)*k<=cnt[a[r+1]]) cur[a[++r]]++;
+                cur[a[l]]--;
+                total += r-l+1;
+            }
+            cout << total << '\n';
+        }
+    }
+}
+```
+
+# F. Gravity Falls
+[문제 링크](https://codeforces.com/contest/2148/problem/F)
+
+## Problem Statement
+
+Farmer John has $n$ arrays $a_1, a_2, \ldots, a_n$ that may have different lengths. He will stack the arrays on top of each other, resulting in a grid with $n$ rows. The arrays are left-aligned and can be stacked in any order he desires.
+
+Then, gravity will take place. Any cell that is not on the bottom row and does not have an element beneath it will fall down a row. This process will be repeated until there are no cells that satisfy the aforementioned constraint.
+
+Over all possible ways FJ can stack the arrays, output the lexicographically minimum bottom row after gravity takes place.
+
+## Input
+
+The first line contains $t$ ($1 \leq t \leq 1000$) — the number of test cases.
+
+The first line of each test case contains $n$ ($1 \leq n \leq 2 \cdot 10^5$).
+
+For the following $n$ lines, the first integer $k_i$ ($1 \leq k \leq 2 \cdot 10^5$) denotes the length of $a_i$.
+
+Then, $k_i$ space-separated integers $a_{i_1}, a_{i_2}, \ldots, a_{i_k}$ follow ($1 \leq a_{i_j} \leq 2 \cdot 10^5$).
+
+It is guaranteed that the sum of $n$ and the sum of all $k_i$ over all test cases does not exceed $2 \cdot 10^5$.
+
+## Output
+
+For each test case, output the lexicographically minimum bottom row on a new line.
+
+## 풀이
+출력해야 하는 인덱스마다 해당 인덱스부터 비교했을 때, 가장 앞에 오는 블록을 찾아 먼저 출력하고 인덱스를 그 뒤로 이동시키며 풀었다.
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+bool comp(vector<int> &a, vector<int> &b, int startIdx) {
+    if(a.size()<=startIdx) return true;
+    if(b.size()<=startIdx) return false;
+    for(int i=startIdx;i<a.size() && i<b.size();i++) {
+        if(a[i]!=b[i]) return a[i] > b[i];
+    }
+    return a.size()>b.size();
+}
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t;
+    while(t--) {
+        int n; cin >> n;
+
+        int maxLen=0;
+        vector<vector<int>> grid(n);
+        for(int i=0;i<n;i++) {
+            int k; cin >> k;
+            maxLen = max(maxLen, k);
+            while(k--) {
+                int a; cin >> a;
+                grid[i].push_back(a);
+            }
+        }
+
+        for(int i=0;i<maxLen;) {
+            int maxIdx=0;
+            for(int j=1;j<n;j++) {
+                if(comp(grid[maxIdx], grid[j], i)) maxIdx=j;
+            }
+            for(int j=i;j<grid[maxIdx].size();j++) cout << grid[maxIdx][j] << ' ';
+            i = grid[maxIdx].size();
+        }
+        cout << '\n';
+    }
+}
+```
+
+# G. Farmer John's Last Wish
+[문제 링크](https://codeforces.com/contest/2148/problem/G)
+
+## Problem Statement
+
+Bessie has found an array $a$ of length $n$ on the floor. There appears to be a handwritten note lying next to the array, seemingly written by Farmer John. The note reads:
+
+Help me, dear Bessie! Let $f(a)$ denote the maximum integer $k$ in the range $[1,n)$ such that $\gcd(a_1, a_2, \ldots, a_k) > \gcd(a_1, a_2, \ldots, a_{k+1})$, or $0$ if no such $k$ exists.
+
+Bessie decides to help FJ. She defines $g(a)$ to represent the maximum value of $f(a)$ over all possible reorderings of $a$.
+
+Bessie decides to not only find $g(a)$, but also the value of $g(p)$ for all prefixes $p$ of $a$. Output $n$ integers, the $i$'th of which is $g([a_1, a_2, \ldots, a_i])$.
+
+## Input
+
+The first line contains an integer $t$ ($1 \le t \le 10^4$) — the number of test cases.
+
+The first line of each test case contains an integer $n$ ($1 \le n \le 2 \cdot 10^5$).
+
+The following line contains $n$ space-separated integers $a_1, a_2, \ldots, a_n$ ($1 \le a_i \le n$).
+
+It is guaranteed that the sum of $n$ over all test cases does not exceed $2 \cdot 10^5$.
+
+## Output
+
+For each test case, output $n$ integers on a new line: the $i$'th of which should be $g([a_1, a_2, \ldots, a_i])$.
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int cnt[200'001];
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t;
+    while(t--) {
+        int n; cin >> n;
+        int gcdVal, maxCnt=0, maxFind=n;
+        memset(cnt, 0, sizeof cnt);
+        for(int i=0;i<n;i++) {
+            int a; cin >> a;
+            gcdVal = i==0 ? a : gcd(gcdVal, a);
+
+            for(int j=1;j*j<=a;j++) {
+                if(a%j==0) {
+                    cnt[j]++;
+                    if(j!=a/j) cnt[a/j]++;
+                    if(j>gcdVal) maxCnt = max(maxCnt, cnt[j]);
+                    if(a/j>gcdVal) maxCnt = max(maxCnt, cnt[a/j]);
+                }
+            }
+            while(maxFind>gcdVal) maxCnt = max(maxCnt, cnt[maxFind--]);
+            cout << min(maxCnt, i) << ' ';
+        }
+        cout << '\n';
+    }
+}
+```
