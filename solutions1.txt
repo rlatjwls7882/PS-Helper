@@ -4701,3 +4701,724 @@ int main() {
     }
 }
 ```
+
+# [Bronze IV] 할인이 필요해
+
+[문제 링크](https://www.acmicpc.net/problem/34323) 
+
+## 문제 설명
+
+<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/c4d6ff67-f5c5-49ce-9c96-8cf00efd3be9/-/preview/"></p>
+
+<p>금오공대 학생회관 내 편의점은 근로 학생이 없는 시간에는 무인으로 운영된다. 이 시간대에는 대부분의 상품을 $N\%$ 할인된 가격으로 구매할 수 있다.</p>
+
+<p>우연이는 배가 고플 때마다 편의점에서 $M+1$ 할인 상품을 즐겨 사곤 한다. $M+1$ 할인은 상품을 $M$개를 사면 $1$개를 무료로 받을 수 있는 것을 뜻한다. 다만, $M+1$ 할인 상품에는 무인 운영 시간 할인이 중복으로 적용되지 않는다. 따라서 무인 운영 시간 할인을 적용하는 것이 $M+1$ 할인보다 더 저렴한 경우, 무인 할인 쪽이 더 유리하다.</p>
+
+<p>어느 날, 우연이는 무인 운영 시간에 $M+1$ 할인 상품을 고른 후 계산하려 했지만, 포스기의 할인 자동 적용 기능이 고장 나 어떤 할인이 더 유리한지 알 수 없었다. 이에 따라 우연이는 직접 더 저렴한 할인 방식을 선택해야 했다. 계산에 약한 우연이를 위해, 상품 $M+1$ 개를 구매할 때 두 할인 방식 중 더 저렴한 쪽을 적용한 최소 금액을 알려주자!</p>
+
+<p><strong>우연이가 고른 상품에는 반드시 $N\%$ 할인 또는 $M+1$ 할인 중 하나만 적용된다.</strong></p>
+
+## 입력 
+
+ <p>첫째 줄에 정수 $N$과 정수 $M$, 물건의 가격을 나타내는 정수 $S$가 공백으로 구분되어 주어진다. $(0 \le N, M \le 100;\ 100 \le S \le 10^8)$</p>
+
+## 출력 
+
+ <p>최소 구매 금액을 출력한다. 소수점은 버린다. 답이 32bit 정수 자료형의 범위를 넘어갈 수 있음에 유의하라.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    ll n, m, s; cin >> n >> m >> s;
+    cout << min(s*m, s*(m+1)*(100-n)/100);
+}
+```
+
+# [Platinum IV] 님 게임 3
+
+[문제 링크](https://www.acmicpc.net/problem/16895) 
+
+## 문제 설명
+
+<p>구사과와 큐브러버가 님 게임을 하고 있다. 님 게임은 돌을 위로 쌓아올린 돌 더미 k개를 이용한다. 각각의 돌 더미에는 한 개 이상의 돌이 있다. 두 사람은 서로 턴을 번갈아가면서 님 게임을 진행한다. 각 사람의 턴이 되면, 돌이 있는 돌 더미를 하나 선택하고, 그 돌 더미에서 돌을 하나 이상 제거한다. 전체 돌 더미에서 마지막 돌을 제거하는 사람이 게임을 이기게 된다. </p>
+
+<p>게임은 구사과가 먼저 시작한다. 두 사람이 최적의 방법으로 게임을 진행했을 때, 구사과가 게임을 이기기 위해서 첫 턴에 할 수 있는 방법의 수를 구하시오.</p>
+
+## 입력 
+
+ <p>첫째 줄에 돌 더미의 개수 N (1 ≤ N ≤ 1000)이 주어진다.</p>
+
+<p>둘째 줄에는 각 돌 더미에 쌓여있는 돌의 개수 P<sub>i</sub> (1 ≤ P<sub>i</sub> ≤ 1000)가 주어진다.</p>
+
+## 출력 
+
+ <p>구사과가 게임을 이기기 위해서 첫 턴에 할 수 있는 방법의 수를 출력한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n; cin >> n;
+
+    int ret=0;
+    vector<int> p(n);
+    for(int i=0;i<n;i++) {
+        cin >> p[i];
+        ret ^= p[i];
+    }
+
+    int cnt=0;
+    if(ret) {
+        for(int i=0;i<n;i++) {
+            if((ret^p[i])<=p[i]) cnt++;
+        }
+    }
+    cout << cnt;
+}
+```
+
+# [Bronze I] 클리크 조절
+
+[문제 링크](https://www.acmicpc.net/problem/33884) 
+
+## 문제 설명
+
+<p>여기, 육군훈련소에 들어가게 된 훈련병 민우가 있다. 국방의 의무를 다하기 위해 입대한 민우는 입대하고 나서야 자신이 사격에 천재적인 재능이 있음을 발견하게 된다.</p>
+
+<p>사격 훈련은 총 $2$회, 훈련마다 $N$발의 사격을 진행하게 된다. 각 사격 훈련이 끝난 뒤, 모든 훈련병은 발사된 총알들이 표적지에 꽂힌 위치를 확인한다. 표적지는 2차원 좌표계, 발사된 총알들이 꽂힌 위치는 2차원 좌표계의 점으로 생각할 수 있다.</p>
+
+<p>두 번의 사격 훈련이 종료된 후, 민우는 훈련마다 자신이 쏜 총알들이 표적지에 꽂힌 위치가 첫 번째 사격과 비교해 정확히 $x$축 양의 방향으로 $A$만큼, $y$축 양의 방향으로 $B$만큼 평행이동한 것을 확인하였다. 민우를 도와 $A$와 $B$를 구해보자.</p>
+
+## 입력 
+
+ <p>첫 번째 줄에 각 사격 훈련마다 발사한 총알의 개수를 의미하는 양의 정수 $N$이 주어진다. $(1\leq N \leq 200\,000)$</p>
+
+<p>두 번째 줄부터 $N$줄에 걸쳐 첫 번째 사격 훈련에서 발사한 총알이 표적지에 꽂힌 위치의 좌표를 의미하는 정수 $x$와 $y$가 공백으로 구분되어 주어진다. $(-10^9\leq x,y \leq 10^9)$</p>
+
+<p>그다음 $N$줄에 걸쳐 두 번째 사격 훈련에서 발사한 총알이 표적지에 꽂힌 위치의 좌표를 의미하는 정수 $x$와 $y$가 공백으로 구분되어 주어진다. $(-10^9\leq x,y \leq 10^9)$</p>
+
+## 출력 
+
+ <p>각 탄착군이 $x$축과 $y$축 양의 방향에 대하여 평행이동한 값을 의미하는 $A$와 $B$를 공백으로 구분하여 출력한다.</p>
+
+<p>문제의 조건을 만족시키는 $A$와 $B$가 반드시 존재한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n; cin >> n;
+    vector<pair<int, int>> a(n), b(n);
+    for(int i=0;i<n;i++) cin >> a[i].first >> a[i].second;
+    for(int i=0;i<n;i++) cin >> b[i].first >> b[i].second;
+    sort(a.begin(), a.end());
+    sort(b.begin(), b.end());
+    cout << b[0].first-a[0].first << ' ' << b[0].second-a[0].second;
+}
+```
+
+# [Silver I] 문자열 화폐
+
+[문제 링크](https://www.acmicpc.net/problem/17828) 
+
+## 문제 설명
+
+<p>작년에 소수나라에 다녀온 하나는, 올해는 문자열나라로 관광을 가려고 한다. 문자열나라에서는 특이하게 알파벳 대문자로 구성된 문자열을 화폐로 사용한다.</p>
+
+<p>문자열나라에서 'A'는 1의 가치, 'B'는 2의 가치, ..., 'Z'는 26의 가치를 가지고 있으며, 이 알파벳들을 붙여 화폐로 쓰일 문자열을 만든다. 예를 들어, "HONGIK"의 가치는 8 + 15 + 14 + 7 + 9 + 11 = 64가 된다.</p>
+
+<p>소수나라에서 특이한 화폐 때문에 큰 스트레스를 받았던 하나는, 이번에는 정확한 소비 계획을 세워 미리 문자열 화폐로 돈을 환전해가려고 한다. 하나가 가져갈 문자열은 딱 하나이며, 길이는 <em>N</em>이고, 가치는 <em>X</em>여야 한다. 그리고 물론 알파벳 대문자로만 이루어져 있어야 한다.</p>
+
+<p>그런데 환전소에서는 사전 순으로 앞서는 문자열을 우선적으로 환전해준다고 한다! 여행 준비에 정신이 없는 하나를 위해, 조건을 만족하면서 사전 순으로 가장 앞서는 문자열 구해주자.</p>
+
+## 입력 
+
+ <p>첫 번째 줄에 문자열의 길이 <em>N</em>(1 ≤ <em>N</em> ≤ 5,000,000)과, 문자열의 가치를 나타내는 정수 <em>X</em>(1 ≤ <em>X</em> ≤ 500,000,000)가 공백으로 구분되어 주어진다.</p>
+
+## 출력 
+
+ <p>첫 번째 줄에 조건을 만족하는 문자열 중, 사전 순으로 가장 앞서는 것을 출력한다. 만약 그런 문자열이 하나도 존재하지 않으면, "<code>!</code>"(따옴표 없이)를 출력한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n, x; cin >> n >> x;
+    if(x<n || n*26<x) {
+        cout << '!';
+        return 0;
+    }
+
+    vector<char> ch;
+    while(n) {
+        int cur = min(x-n+1, 26);
+        ch.push_back(cur+'A'-1);
+        n--;
+        x -= cur;
+    }
+    for(int i=ch.size()-1;i>=0;i--) cout << ch[i];
+}
+```
+
+# [Silver II] Bottleneck Travelling Salesman Problem (Small)
+
+[문제 링크](https://www.acmicpc.net/problem/24512) 
+
+## 문제 설명
+
+<p>외판원 순회 문제는 영어로 Traveling Salesman Problem (TSP) 라고 불리는 문제로 computer science 분야에서 가장 중요하게 취급되는 문제 중 하나이다. 이 중 변종 문제 중 하나인 Bottleneck Traveling Salesman Problem (BTSP) 문제를 살펴보자.</p>
+
+<p>정점의 개수가 $N$개, 비용이 있는 간선이 $M$개인 방향 그래프가 주어진다. 어느 한 정점에서 출발해, 출발한 정점을 제외한 $N-1$개의 정점을 모두 한 번씩 방문하고 다시 처음 정점으로 돌아오는 순회를 찾으려고 한다. 이러한 순회는 여러 가지가 있을 수 있는데, 정점 간 이동 비용의 최댓값을 최소화하려고 한다.</p>
+
+<p>그래프가 주어졌을 때, 정점 간 이동 비용의 최댓값을 최소화하면서 모든 정점을 방문하는 순회를 찾아보자.</p>
+
+## 입력 
+
+ <p>첫 번째 줄에는 정점의 개수 $N$과 간선의 개수 $M$이 주어진다. ($2 \le N \le 9$, $0 \le M \le N(N-1)$)</p>
+
+<p>두 번째 줄부터 $M$개의 줄에 걸쳐서 간선에 대한 정보가 세 정수 $u$, $v$, $c$로 주어진다. 이는 정점 $u$에서 $v$로 향하는 비용이 $c$인 간선이 있음을 의미한다. 두 정점 사이에 같은 방향의 간선이 2개 이상 존재하지 않는다. ($1 \le u, v \le N$, $u \ne v$, $1 \le c \le 5 \, 000 \, 000$)</p>
+
+## 출력 
+
+ <p>모든 정점을 방문하는 순회가 있다면 첫 번째 줄에 정점 간 이동 비용의 최댓값의 최솟값을 출력한다. 만약에 이러한 순회가 없는 경우 <span style="color:#e74c3c;"><code>-1</code></span>을 출력한다.</p>
+
+<p>모든 정점을 방문하는 순회가 있다면, 다음 줄에 정점 간 이동 비용의 최댓값을 최소화하도록 방문해야 하는 정점 번호를 순서대로 $N$개를 출력한다. 이러한 순회가 여러 가지가 있는 경우 아무것이나 출력해도 된다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+const int MAX = 9;
+const int INF = 0x3f3f3f3f;
+
+int n, m, minCost=INF;
+int cost[MAX][MAX];
+bool visited[MAX];
+
+vector<int> minVis, vis;
+
+void dfs(int depth=1, int cur=0, int curCost=0) {
+    if(depth==n) {
+        if(cost[cur][0]) {
+            int nextCost = max(curCost, cost[cur][0]);
+            if(minCost>nextCost) {
+                minCost=nextCost;
+                minVis = vis;
+            }
+        }
+        return;
+    }
+
+    for(int i=0;i<n;i++) {
+        if(cost[cur][i] && !visited[i]) {
+            visited[i]=true;
+            vis.push_back(i);
+            dfs(depth+1, i, max(curCost, cost[cur][i]));
+            vis.pop_back();
+            visited[i]=false;
+        }
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    cin >> n >> m;
+    while(m--) {
+        int a, b, c; cin >> a >> b >> c;
+        cost[a-1][b-1]=c;
+    }
+    visited[0]=true;
+    vis.push_back(0);
+    dfs();
+
+    if(minCost==INF) {
+        cout << -1;
+    } else {
+        cout << minCost << '\n';
+        for(int e : minVis) cout << e+1 << ' ';
+    }
+}
+```
+
+# [Silver II] 이브, 프시케 그리고 푸른 MEX의 아내
+
+[문제 링크](https://www.acmicpc.net/problem/28250) 
+
+## 문제 설명
+
+<p>$\textrm{mex}(S)$는 집합 $S$에 포함되지 않은 가장 작은 음이 아닌 정수이다.</p>
+
+<p>$N$개의 $0$ 이상의 정수 $A_1, A_2, \dots, A_N$이 주어질 때, 다음 값을 구하는 프로그램을 작성하시오.</p>
+
+<p>$$\sum_{i=1}^{N-1} \sum_{j=i+1}^{N} \textrm{mex}(\{A_i, A_j\})$$</p>
+
+## 입력 
+
+ <p>첫째 줄에 정수 $N$이 주어진다. ($2 \le N \le 200\,000$)</p>
+
+<p>둘째 줄에 $N$개의 정수 $A_1, A_2, \dots, A_N$이 공백으로 구분되어 주어진다. ($0 \le A_i \le 100\,000$)</p>
+
+## 출력 
+
+ <p>문제에서 요구하는 값을 출력한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+ll cnt[3];
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n; cin >> n;
+    while(n--) {
+        int num; cin >> num;
+        cnt[min(num, 2)]++;
+    }
+    cout << cnt[0]*(cnt[0]-1)/2 + cnt[0]*cnt[1]*2 + cnt[0]*cnt[2];
+}
+```
+
+# [Silver III] 세과영엔 슬픈 전설이 있어
+
+[문제 링크](https://www.acmicpc.net/problem/30504) 
+
+## 문제 설명
+
+<p>세종이는 영재에게 빌려준 돈을 현재까지도 받지 못했다. 세종이는 영재에게 돈을 갚으라고 여러 번 독촉했지만, 슬프게도 영재는 세종이의 말을 알아듣지 못하는 것 같다. 그래서 세종이는 영재에게 마지막 유예 기간 $N$일을 주었다. 영재는 세종이가 준 $N$일 동안 빌린 돈을 모두 갚아야 한다.</p>
+
+<p>세종이와 영재에게는 특이한 규칙이 있다. 세종이는 $i$일째 되는 날에 $A_i$ 만큼 분노한다. 만약 $i$일에 세종이가 $A_i$원 이상의 돈을 받지 못한다면 세종이는 영재에게 분노를 표출하게 된다. 영재는 자신이 가진 돈을 $N$개의 자루에 나누어 담아 세종이에게 하루에 한 자루씩 주려고 한다.</p>
+
+<p>세종이가 받아야 하는 최소 금액과 영재가 나눠 담은 금액이 주어졌을 때, 영재가 세종이의 분노를 피해 빚을 갚는 방법을 찾는 프로그램을 작성하시오.</p>
+
+## 입력 
+
+ <p>첫째 줄에 유예 기간의 날짜 수 $N$이 주어진다. $(1\leq N\leq 200\, 000)$</p>
+
+<p>둘째 줄에 $N$개의 양의 정수 $A_1$, $A_2$, $\cdots$, $A_N$이 공백으로 구분되어 주어진다. 이때 $A_i$는 $i$번째 날에 세종이가 받아야 하는 최소 금액이다. $(1\le A_i\le 10^{8})$</p>
+
+<p>셋째 줄에 $N$개의 양의 정수 $B_1,B_2,\cdots ,B_N$이 공백으로 구분되어 주어진다. 이때 $B_j$는 영재가 $j$번째 자루에 담은 금액이다. $(1\le B_j\le 10^{8})$</p>
+
+<p>$\sum_{i=1}^{N}{A_i}\le 2\times 10^{9};$ $\sum_{j=1}^{N}{B_j}\le 2\times 10^{9}$ 이다.</p>
+
+## 출력 
+
+ <p>영재가 $1$일부터 $N$일까지 각 날마다 지불해야 하는 금액을 공백으로 구분해 출력한다.</p>
+
+<p>만약 빚을 갚는 것이 불가능해 세종이가 분노를 표출하게 된 경우 대신 <span style="color:#e74c3c;"><code>-1</code></span>을 출력한다.</p>
+
+<p>가능한 답이 여러 가지인 경우 그 중 아무거나 하나만 출력한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n; cin >> n;
+    vector<pair<int, int>> a(n);
+    for(int i=0;i<n;i++) {
+        cin >> a[i].first;
+        a[i].second=i;
+    }
+    vector<int> b(n);
+    for(int i=0;i<n;i++) cin >> b[i];
+
+    sort(a.begin(), a.end());
+    sort(b.begin(), b.end());
+
+    vector<int> ret(n);
+    for(int i=0;i<n;i++) {
+        if(a[i].first>b[i]) {
+            cout << -1;
+            return 0;
+        }
+        ret[a[i].second]=b[i];
+    }
+    for(int e : ret) cout << e << ' ';
+}
+```
+
+# [Silver II] 늑대와 올바른 단어
+
+[문제 링크](https://www.acmicpc.net/problem/13022) 
+
+## 문제 설명
+
+<p>다음은 늑대 나라에서 사용하는 올바른 단어에 대한 설명이다.</p>
+
+<ol>
+	<li>임의의 양의 정수 n에 대해서, 'w'가 n번 나오고, 그 다음에 'o'가 n번, 그 다음에 'l'이 n번, 그 다음에 'f'가 n번 나온 단어는 올바른 단어이다.</li>
+	<li>올바른 단어 두 개를 이은 단어도 올바른 단어이다.</li>
+	<li>1번과 2번 조건으로 만들 수 있는 단어만 올바른 단어이다.</li>
+</ol>
+
+<p>다음은 올바른 단어의 예시이다.</p>
+
+<ul>
+	<li>1번 규칙으로 만든 "wolf", "wwoollff", "wwwooolllfff"는 모두 올바른 단어이다.</li>
+	<li>2번 규칙으로 만든 "wolfwwoollff"은 올바른 단어이다.</li>
+	<li>2번 규칙을 두 번 써서 만든 "wolfwwoollffwolf"은 올바른 단어이다.</li>
+	<li>"wfol"은 올바른 단어가 아니다. (순서가 올바르지 않음)</li>
+	<li>"wwolfolf"는 올바른 단어가 아니다. (문자열의 중간에 다른 문자열을 집어 넣음)</li>
+	<li>"wwwoolllfff"는 올바른 단어가 아니다. (o가 2번 들어갔다)</li>
+</ul>
+
+## 입력 
+
+ <p>첫째 줄에 단어가 주어진다. 단어는 w, o, l, f로만 이루어져 있으며, 길이는 50을 넘지 않는다.</p>
+
+## 출력 
+
+ <p>입력으로 주어진 단어가 올바른 단어인 경우에는 1을, 아니면 0을 출력한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+string s;
+
+bool chk() {
+    int curW=0, cnt=0;
+    for(int i=0;i<s.length();) {
+        if(s[i]=='w') {
+            curW++;
+            i++;
+        } else {
+            if(curW==0 || s.length()<i+3*curW) return 0;
+            for(int j=i;j<i+curW;j++) if(s[j]!='o') return 0;
+            for(int j=i+curW;j<i+2*curW;j++) if(s[j]!='l') return 0;
+            for(int j=i+2*curW;j<i+3*curW;j++) if(s[j]!='f') return 0;
+            i += 3*curW;
+            curW=0;
+        }
+    }
+    return curW==0;
+}
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    cin >> s;
+    cout << chk();
+}
+```
+
+# [Silver II] 엉성한 도토리 분류기
+
+[문제 링크](https://www.acmicpc.net/problem/31848) 
+
+## 문제 설명
+
+<p>엉성한 분류기를 이용하여 도토리를 크기별로 나누고자 한다.</p>
+
+<p>분류기는 $N$개의 구멍이 뚫린 기울어진 판자이다. 분류기의 구멍은 높은 쪽부터 차례로 $1$번부터 $N$번까지 번호가 매겨져 있다. $i$번 구멍의 크기는 $a_i$이다.</p>
+
+<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/6df2db00-c945-4b9e-a7fc-5d7b046351b8/-/preview/" style="width: 400px; height: 292px;"></p>
+
+<p>분류기에 도토리를 넣으면 $1$번 구멍부터 $N$번 구멍까지 굴러간다. 분류기의 표면은 거칠기 때문에 도토리가 하나의 구멍을 지나고 나면 크기가 $1$씩 줄어든다. 예를 들어 $1$번 구멍을 지날 때 도토리의 크기가 $10$이었다면, $1$번 구멍을 지나고 나서 $2$번 구멍을 지날 때는 크기가 $1$ 줄어 $9$가 된다. 마찬가지로 도토리가 $2$번 구멍을 지났다면 $3$번 구멍을 지날 때 크기가 $1$ 줄어 $8$이 된다.</p>
+
+<p>도토리는 현재 크기보다 크거나 같은 구멍을 지날 때 그 구멍으로 떨어진다. </p>
+
+<p>주어지는 $Q$개의 도토리에 대하여, 각각의 도토리를 분류기에 넣었을 때 굴러떨어져 나오는 구멍 번호를 순서대로 출력하는 프로그램을 작성하라.</p>
+
+## 입력 
+
+ <p>첫 번째 줄에 분류기의 구멍 개수를 나타내는 정수 $N$이 주어진다.</p>
+
+<p>두 번째 줄에 각 구멍의 크기를 나타내는 $N$개의 정수 $a_1, a_2, \cdots, a_N$이 공백으로 구분되어 주어진다.</p>
+
+<p>세 번째 줄에 분류해야 하는 도토리의 개수를 나타내는 정수 $Q$가 주어진다. </p>
+
+<p>네 번째 줄에 분류기에 넣을 도토리의 크기를 나타내는 $Q$개의 정수 $s_1, s_2, \cdots, s_Q$가 공백으로 구분되어 주어진다.</p>
+
+<p>주어진 입력 조건에서 도토리는 크기에 상관없이 어떤 구멍으로 빠져나올 수 있다.</p>
+
+## 출력 
+
+ <p>각 도토리를 분류기에 넣었을 때 굴러떨어져 나오는 구멍의 번호를 도토리가 주어지는 순서대로 공백으로 구분하여 출력한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int cover[100'001];
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n; cin >> n;
+
+    int lastCover=0;
+    for(int i=0;i<n;i++) {
+        int a; cin >> a;
+        for(int j=lastCover+1;j<=min(a+i, n);j++) cover[j]=i+1;
+        lastCover = max(lastCover, a+i);
+    }
+
+    int q; cin >> q;
+    while(q--) {
+        int s; cin >> s;
+        cout << cover[s] << ' ';
+    }
+}
+```
+
+# [Silver V] 유물 발굴
+
+[문제 링크](https://www.acmicpc.net/problem/32344) 
+
+## 문제 설명
+
+<p>홍익대학교 운동장은 $R$행 $C$열 크기의 격자 모양이다. 이런 홍익대학교 운동장에서 학계를 뒤흔들만한 유물의 조각들이 발견되었다. 하지만 한 번에 여러 유물을 발굴하는 것은 불가능하다. 따라서, 유물의 예상 크기를 조사해서 예상 크기가 가장 큰 유물을 먼저 발굴하려고 한다. 만약 그런 유물이 여러 개라면, 번호가 가장 작은 것을 먼저 발굴하려고 한다.</p>
+
+<p>조각은 $1 \times 1$ 크기이고, 같은 위치에 여러 조각이 존재할 수 있다. 유물의 예상 크기는 해당 유물의 조각들을 한번에 묶을 수 있는 가장 작은 직사각형의 크기이다. 직사각형의 모든 변은 운동장과 평행해야 한다.</p>
+
+<p>가장 먼저 발굴하는 유물의 번호와 예상 크기를 알아내보자!</p>
+
+## 입력 
+
+ <p>첫째 줄에 홍익대학교 운동장의 세로 길이를 나타내는 정수 $R$, 가로 길이를 나타내는 정수 $C$가 공백으로 구분되어 주어진다. $(1 \leq R, C \leq 100\,000)$</p>
+
+<p>둘째 줄에 조각의 개수 정수 $N$이 주어진다. $(1 \leq N \leq 100\,000)$</p>
+
+<p>셋째 줄부터 $N$개의 줄에 걸쳐 정수 $a_i$, $v_i$, $h_i$가 공백으로 구분되어 주어진다. $(1 \leq a_i \leq N;$ $1 \leq v_i \leq R; 1 \leq h_i \leq C)$ 이는 $a_i$번 유물의 조각이 $v_i$행 $h_i$열에 존재함을 의미한다.</p>
+
+## 출력 
+
+ <p>첫째 줄에 가장 먼저 발굴하는 유물의 번호와 예상 크기를 공백으로 구분하여 출력한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+const int MAX = 100'001;
+
+ll maxH[MAX], minH[MAX], maxV[MAX], minV[MAX];
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int r, c, n; cin >> r >> c >> n;
+
+    int idx=0;
+    ll maxSize=0;
+    fill(minH, minH+MAX, MAX);
+    fill(minV, minV+MAX, MAX);
+    while(n--) {
+        ll a, v, h; cin >> a >> v >> h;
+        minH[a] = min(minH[a], h);
+        maxH[a] = max(maxH[a], h);
+        minV[a] = min(minV[a], v);
+        maxV[a] = max(maxV[a], v);
+
+        ll size = (maxH[a]-minH[a]+1)*(maxV[a]-minV[a]+1);
+        if(maxSize<size || maxSize==size && idx>a) {
+            maxSize = size;
+            idx=a;
+        }
+    }
+    cout << idx << ' ' << maxSize;
+}
+```
+
+# [Silver IV] 응애(EASY)
+
+[문제 링크](https://www.acmicpc.net/problem/28088) 
+
+## 문제 설명
+
+<p><strong>이 문제는 $N,M,K$의 제한 범위만 제외하고 <a href="https://www.acmicpc.net/problem/28089">28089</a>번 응애(HARD)와 같은 문제이다.</strong></p>
+
+<p>SCSC 동아리원들은 모두 응애이다. 응애들은 응애를 볼 때 응애!라고 인사를 한다.</p>
+
+<p>한 사람이 응애!라고 인사를 하면 그 양 옆에 있는 친구도 응애!라고 인사를 해야 한다. 다만, 양 옆에서 동시에 응애!라는 인사를 받으면 너무 응애가 된 나머지 인사를 하는 것을 잊어버려 인사를 하지 못한다.</p>
+
+<p>$N$명의 SCSC 동아리원이 원 모양으로 둥글게 서 있고 그 중 $M$명의 부원이 처음에 응애!라고 인사를 할 때 $K$번 인사를 진행한 후, 다음에 인사할 사람의 수를 구하여라.</p>
+
+<p>인사는 모두가 동시에 하며, 동아리원들은 시계 방향으로 $0$번부터 $N - 1$번까지 순서대로 서 있다고 가정한다.</p>
+
+## 입력 
+
+ <p>첫째 줄에 $N,M,K$가 공백으로 구분되어 주어진다. $(3 \le N \le 200; 1 \le M \le N; 0 \le K \le 10^6)$ 둘째 줄부터 $M$개의 줄에 걸쳐 처음에 인사할 사람의 번호가 한 줄에 하나씩 주어진다. 같은 입력이 2번 이상 주어지지 않는다.</p>
+
+## 출력 
+
+ <p>$K$번 인사를 진행한 후, 다음에 인사할 사람의 수를 출력한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+bool hi[200], nextHi[200];
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n, m, k; cin >> n >> m >> k;
+    while(m--) {
+        int num; cin >> num;
+        hi[num]=true;
+    }
+
+    while(k--) {
+        memset(nextHi, 0, sizeof nextHi);
+        for(int i=0;i<n;i++) nextHi[i] = hi[(i-1+n)%n] != hi[(i+1)%n];
+        memcpy(hi, nextHi, sizeof hi);
+    }
+    cout << accumulate(hi, hi+n, 0);
+}
+```
+
+# [Silver I] 수열 걷기
+
+[문제 링크](https://www.acmicpc.net/problem/4929) 
+
+## 문제 설명
+
+<p>길이가 유한하고, 오름차순 순서로 되어있는 두 수열이 주어진다. 두 수열에 공통으로 들어있는 원소는 교차점으로 생각할 수 있다.</p>
+
+<p><img alt="" src="https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/upload/images/twoseq.png" style="width: 153px; height: 354px; float: right;"></p>
+
+<p>아래는 두 수열과 교차점은 굵게 나타낸 것이다.</p>
+
+<p>수열 1 = 3 5 <strong>7</strong> 9 20 <strong>25</strong> 30 40 <strong>55</strong> 56 <strong>57</strong> 60 62</p>
+
+<p>수열 2 = 1 4 <strong>7</strong> 11 14 <strong>25</strong> 44 47 <strong>55</strong> <strong>57</strong> 100</p>
+
+<p>이 두 수열은 다음과 같이 걸을 수 있다.</p>
+
+<ol>
+	<li>두 수열중 하나의 첫 번째 원소에서 걷기를 시작한다. 걷는 것은 앞으로만 걸을 수 있다.</li>
+	<li>교차점에 도착했을 때는, 현재 수열에서 계속 걸을지, 다른 수열로 갈아탈지 결정할 수 있다.</li>
+</ol>
+
+<p>방문한 수의 합이 최대가 되는 경로를 구하는 프로그램을 작성하시오. 위의 예에서 3, 5, 7, 9, 20, 25, 44, 47, 55, 56, 57, 60, 62와 같이 걷는다면 합이 450으로 최대가 된다.</p>
+
+## 입력 
+
+ <p>입력은 여러 개의 테스트 케이스로 이루어져 있다. 각 테스트 케이스는 두 줄로 이루어져 있다.</p>
+
+<p>각 줄의 첫 번째 수는 수열의 길이이다. 그 다음에는 수열의 원소가 순서대로 주어진다. 수열의 길이는 1이상이고, 10,000을 넘지 않는다. 수열에 들어있는 모든 수는 -10,000보다 크거나 같고, 10,000보다 작거나 같은 정수이다.</p>
+
+<p>입력의 마지막 줄에는 0이 하나 주어진다.</p>
+
+## 출력 
+
+ <p>각 테스트 케이스에 대해서, 얻을 수 있는 최대 합을 출력한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    while(true) {
+        int n; cin >> n;
+        if(!n) break;
+
+        map<int, int> idx;
+        vector<int> a(n);
+        for(int i=0;i<n;i++) {
+            cin >> a[i];
+            idx[a[i]]=i;
+        }
+
+        int sum=0, lastA=0, lastB=0;
+        int m; cin >> m;
+        vector<int> b(m);
+        for(int i=0;i<m;i++) {
+            cin >> b[i];
+            if(idx.count(b[i])) {
+                sum += max(accumulate(a.begin()+lastA, a.begin()+idx[b[i]]+1, 0), accumulate(b.begin()+lastB, b.begin()+i+1, 0));
+                lastA = idx[b[i]]+1;
+                lastB = i+1;
+            }
+        }
+        if(lastA<n || lastB<m) sum += max(accumulate(a.begin()+lastA, a.end(), 0), accumulate(b.begin()+lastB, b.end(), 0));
+        cout << sum << '\n';
+    }
+}
+```
+
+# [Platinum III] 다각형 게임
+
+[문제 링크](https://www.acmicpc.net/problem/13034) 
+
+## 문제 설명
+
+<p>N개의 꼭짓점으로 이루어진 볼록 다각형이 있다. 다각형의 내각은 모두 180보다 작다. 꼭짓점은 1부터 N번까지 시계 방향으로 번호가 매겨져 있다.</p>
+
+<p>성관이와 홍준이는 다각형에서 게임을 하려고 한다. 성관이가 먼저 턴을 갖는다.</p>
+
+<p>각 턴마다 플레이어는 두 꼭짓점을 고르고, 선분을 긋는다 (변과 일치해도 된다). 이때, 이미 그려져 있는 선분과 교차하면 안 된다 (선분의 끝 점에서 겹치는 것도 교차하는 것이다). 더 이상 선분을 그릴 수 없는 사람이 게임을 패배한다.</p>
+
+<p>N이 주어진다. 두 사람이 최적의 방법으로 게임했을 때, 누가 이기는지 구하는 프로그램을 작성하시오.</p>
+
+## 입력 
+
+ <p>첫째 줄에 N (3 ≤ N ≤ 1,000) 이 주어진다.</p>
+
+## 출력 
+
+ <p>성관이가 이기면 1, 홍준이가 이기면 2를 출력한다.</p>
+
+## 풀이
+
+``` c++
+#include<bits/stdc++.h>
+using namespace std;
+
+int g[1001];
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n; cin >> n;
+    for(int i=2;i<=n;i++) {
+        set<int> s;
+        for(int j=0;j<=i-2;j++) s.insert(g[j]^g[i-2-j]);
+        for(int j=0;;j++) {
+            if(!s.count(j)) {
+                g[i]=j;
+                break;
+            }
+        }
+    }
+    cout << (g[n] ? 1 : 2);
+}
+```
